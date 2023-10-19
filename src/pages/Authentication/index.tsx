@@ -112,12 +112,14 @@ export const SignIn = () => {
                 />
 
                 <div className="space-y-4 px-8 text-black-primary">
-                  <div
-                    // onClick={() => navigate('/enter-email')}
-                    className="cursor-pointer text-center text-xs text-black-primary sm:text-sm md:text-base"
-                  >
+                  <div className="cursor-pointer text-center text-xs text-black-primary sm:text-sm md:text-base">
                     Forgot Password?{' '}
-                    <span className="font-semibold">Reset Password</span>
+                    <span
+                      onClick={() => navigate('/reset-password-email')}
+                      className="font-semibold"
+                    >
+                      Reset Password
+                    </span>
                   </div>
                 </div>
               </div>
@@ -133,11 +135,11 @@ export const SignIn = () => {
       <div className="hidden h-screen w-1/2 object-contain p-5 md:block">
         <div
           style={{ backgroundImage: `url(${ASSETS.AUTH.SIGN_IN_COVER})` }}
-          className={`h-full rounded-br-[75px] flex flex-col items-center justify-center`}
+          className={`flex h-full flex-col items-center justify-center rounded-br-[75px]`}
         >
-          <div className='space-y-2 flex flex-col items-center justify-center'>
-            <img src={ASSETS.AUTH.SEARCH_SELECT_STYL} alt="" className='h-14' />
-            <div className="border border-black-primary text-black-primary font-semibold text-center space-y-1 px-10 py-5">
+          <div className="flex flex-col items-center justify-center space-y-2">
+            <img src={ASSETS.AUTH.SEARCH_SELECT_STYL} alt="" className="h-14" />
+            <div className="space-y-1 border border-black-primary px-10 py-5 text-center font-semibold text-black-primary">
               <div className="text-xs">Learn more about style on</div>
               <div className="text-base sm:text-lg md:text-xl">
                 (support@hairstyl.co.uk)

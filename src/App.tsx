@@ -26,6 +26,9 @@ import { DispensaryDetail } from './pages/Dispensaries/detail';
 import { Drivers } from './pages/Drivers';
 import { DriversDetail } from './pages/Drivers/detail';
 import { AdminOrderDetail } from './components/orderDetails';
+import { ResetPassword } from './pages/Authentication/resetPassword';
+import { ResetPasswordOtp } from './pages/Authentication/resetPasswordOtp';
+import { ResetPasswordEmail } from './pages/Authentication/resetPasswordEmail';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -51,6 +54,11 @@ function App() {
             <ModalProvider>
               <Routes>
                 {/* <Route path="/calendar" element={<Calendar />} /> */}
+                <Route path="/" element={<SignIn />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/reset-password-email" element={<ResetPasswordEmail />} />
+                <Route path="/reset-password-otp" element={<ResetPasswordOtp />} />
+
                 <Route path="/chat" element={<ChatComponent />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/order-detail" element={<OrderDetail />} />
@@ -62,7 +70,7 @@ function App() {
                 <Route path="/revenue" element={<Revenue />} /> 
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/chart" element={<Chart />} /> 
-                <Route path="/" element={<SignIn />} />
+
                 <Route path="/customers" element={<Customer />} />
                 <Route path="/customer-detail" element={<CustomerDetail />} />
 
