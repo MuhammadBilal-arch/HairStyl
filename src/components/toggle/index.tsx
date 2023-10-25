@@ -1,4 +1,5 @@
 export const ToggleButton = ({
+  id,
   status,
   onChangeStatus,
   text,
@@ -18,8 +19,7 @@ export const ToggleButton = ({
       UnCheckedToggleButtonColor: UnCheckedToggleButtonColor || 'bg-gray-extraLight',
       // Add other styles for unchecked state as needed
     },
-  };
-
+  }; 
   return (
     <div className=" mt-4 flex space-x-2">
       <div className="relative mr-2 inline-block w-10 select-none align-middle transition duration-200 ease-in">
@@ -27,17 +27,17 @@ export const ToggleButton = ({
           onChange={onChangeStatus}
           type="checkbox"
           name="toggle"
-          id="toggle"
+          id={id}
           checked={status}
-          className={`toggle-checkbox absolute top-1 bottom-1 block h-4 w-4 cursor-pointer appearance-none rounded-full ${
+          className={`toggle-checkbox absolute top-0.5 bottom-0.5  block h-4 w-4 cursor-pointer appearance-none rounded-full ${
             status
               ? toggleStyles.checked.CheckedToggleButtonColor
               : toggleStyles.unchecked.UnCheckedToggleButtonColor
           }`}
         />
         <label
-          htmlFor="toggle"
-          className={`toggle-label block h-6 cursor-pointer overflow-hidden rounded-full ${
+          htmlFor={id}
+          className={`toggle-label block h-5 cursor-pointer overflow-hidden rounded-full ${
             status
               ? toggleStyles.checked.backgroundColor
               : toggleStyles.unchecked.backgroundColor

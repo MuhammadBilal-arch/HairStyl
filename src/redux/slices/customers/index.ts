@@ -60,7 +60,7 @@ export const userSlice = createSlice({
 
 export const fetchUsers = createAsyncThunk(
   'users/fetchUsers',
-  async (payload, { rejectWithValue }) => {
+  async (payload:any, { rejectWithValue }) => {
     try {
       const result = await API_HANDLER(
         'POST',

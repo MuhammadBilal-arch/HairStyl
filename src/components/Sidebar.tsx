@@ -1,10 +1,15 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import Logo from '../images/logo/logo.svg';
-import SidebarLinkGroup from './SidebarLinkGroup';
+// import Logo from '../images/logo/logo.svg';
+// import SidebarLinkGroup from './SidebarLinkGroup';
 import { ASSETS } from '../images/path';
 import ModalContext from '../utils/context/modalContext';
-import { useSelector } from 'react-redux';
+import { HiHome, HiUsers } from 'react-icons/hi';
+import { HiSquares2X2 } from 'react-icons/hi2';
+import { BsBox } from 'react-icons/bs';
+import { BiBarChartSquare } from 'react-icons/bi';
+import { FaUserAlt } from 'react-icons/fa';
+import { MdAdminPanelSettings, MdOutlineLogout } from 'react-icons/md';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -14,7 +19,7 @@ interface SidebarProps {
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
-  const { user } = useSelector((state) => state.User);
+
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
   const { modalStatus } = useContext<any>(ModalContext);
@@ -97,119 +102,111 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       </div>
       {/* <!-- SIDEBAR HEADER --> */}
 
-      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+      <div className="no-scrollbar flex h-full flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
-        <nav className="mt-5 px-4 lg:mt-9 lg:px-6">
+        <nav className="my-5 h-full px-4 lg:my-9 lg:px-6">
           {/* <!-- Menu Group --> */}
-          <div>
-            {user.accountType === 'SUPER_ADMIN' ? (
-              <ul className="mb-6 flex flex-col gap-1.5">
+          <div className="flex h-full flex-col justify-between ">
+            <div>
+              <ul className="mb-6 flex flex-col gap-1">
                 {/* <!-- Menu Item Calendar --> */}
                 <li>
                   <NavLink
-                    to="/dispensaries"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('dispensaries') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
+                    to="/"
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('order') && 'sidebar-item-active'
                     }`}
                   >
-                    Dispensaries
+                    <HiHome /> <span>Home</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/clients"
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('clients') && 'sidebar-item-active'
+                    }`}
+                  >
+                    <HiUsers /> <span>Clients</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/services"
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('services') && 'sidebar-item-active'
+                    }`}
+                  >
+                    <HiSquares2X2 /> <span>Services</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
                     to="/customers"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('customers') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('customers') && 'sidebar-item-active'
                     }`}
                   >
-                    Customers
+                    <HiUsers /> <span>Customers</span>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
-                    to="/drivers"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('drivers') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
+                    to="/products"
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('products') && 'sidebar-item-active'
                     }`}
                   >
-                    Drivers
+                    <BsBox /> <span>Products</span>
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink
-                    to="/settings"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('settings') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
-                    }`}
-                  >
-                    Settings
-                  </NavLink>
-                </li>
-              </ul>
-            ) : (
-              <ul className="mb-6 flex flex-col gap-1.5">
-                {/* <!-- Menu Item Calendar --> */}
-                <li>
-                  <NavLink
-                    to="/orders"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('order') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
-                    }`}
-                  >
-                    Orders
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/inventory"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('inventory') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
-                    }`}
-                  >
-                    Inventory
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/revenue"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('revenue') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
-                    }`}
-                  >
-                    Revenue
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink
-                    to="/profile"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('profile') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
-                    }`}
-                  >
-                    Profile
-                  </NavLink>
-                </li>
+
                 <li>
                   <NavLink
                     to="/settings"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes('settings') &&
-                      'underline decoration-yellow-primary decoration-2 underline-offset-4 dark:bg-meta-4'
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('settings') && 'sidebar-item-active'
                     }`}
                   >
-                    Settings
+                    <BiBarChartSquare /> <span>Sales</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/staff"
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('staff') && 'sidebar-item-active'
+                    }`}
+                  >
+                    <FaUserAlt className="text-sm" /> <span>Staff</span>
                   </NavLink>
                 </li>
               </ul>
-            )}
+
+              <div className="border-t border-white pt-2">
+                <NavLink
+                  to="/orders"
+                  className={`sidebar-item-inactive ${
+                    pathname.includes('order') && 'sidebar-item-active'
+                  }`}
+                >
+                  <MdAdminPanelSettings className="text-lg" />{' '}
+                  <span>Accounts & settings</span>
+                </NavLink>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4 border-t border-white px-4 py-2 text-white">
+              <img
+                src={ASSETS.AUTH.SIGN_IN_COVER}
+                alt=""
+                className="h-8 w-8 rounded-full object-cover"
+              />{' '}
+              <div className="flex flex-col">
+                <div className="text-base">Olivia Rhye</div>
+                <div className="text-sm">olivia@untitledui.com</div>
+              </div>
+              <MdOutlineLogout className="text-sm md:text-xl" />
+            </div>
           </div>
         </nav>
         {/* <!-- Sidebar Menu --> */}

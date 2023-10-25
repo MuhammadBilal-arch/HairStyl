@@ -12,7 +12,7 @@ import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
 
-export const Customer = () => {
+export const Clients = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
   const { users } = useSelector((state: any) => state.Users);
@@ -102,7 +102,7 @@ export const Customer = () => {
 
   return (
     <Table
-      heading="Customers"
+      heading="Clients"
       columns={columns}
       data={users}
       filterByDays={true}

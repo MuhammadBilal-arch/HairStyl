@@ -37,8 +37,12 @@ module.exports = {
       red: {
         delete: '#BF360C',
       },
+      blue: {
+        primary: '#026AA2',
+        light: '#F0F9FF',
+      },
       gray: {
-        disabled:"#F2F4F7",
+        disabled: '#F2F4F7',
         transparent: 'rgba(0,0,0,0.5)',
         extraLight: '#EFEFEF',
         light: '#f5f5f5',

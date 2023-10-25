@@ -12,6 +12,8 @@ export const InputWithLabel = ({
   onChange,
   value,
   disable,
+  touched,
+  errors
 }: //   onChange,
 any) => {
   return (
@@ -36,6 +38,12 @@ any) => {
           className="block w-full px-5 py-2 text-sm text-black-primary  placeholder-gray-transparent focus:outline-none border border-black-primary border-opacity-20"
         />
       </div>
+      {touched && errors && (
+        <div className="Inter-Light text-red-delete flex items-center space-x-1 pt-0.5 text-left text-xs">
+          <MdError className="md:text-normal text-xs sm:text-sm" />{' '}
+          <div>{errors}</div>
+        </div>
+      )}
     </div>
   );
 };
@@ -125,7 +133,7 @@ export const InputPassword = ({
         )}
       </div>
       {touched && errors && (
-        <div className="Inter-Light text-red-primary flex items-center space-x-1 pt-0.5 text-left text-xs">
+        <div className="Inter-Light text-red-delete flex items-center space-x-1 pt-0.5 text-left text-xs">
           <MdError className="md:text-normal text-xs sm:text-sm" />{' '}
           <div>{errors}</div>
         </div>

@@ -12,7 +12,7 @@ import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
 
-export const Customer = () => {
+export const Products = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
   const { users } = useSelector((state: any) => state.Users);
@@ -36,8 +36,8 @@ export const Customer = () => {
 
   const columns = [
     {
-      name: 'Clients',
-      selector: 'clients',
+      name: 'Products',
+      selector: 'Products',
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
@@ -59,16 +59,8 @@ export const Customer = () => {
       sortable: true,
     },
     {
-      name: 'City',
+      name: 'Shop',
       selector: (row: any) => calculateAge(row.city),
-    },
-    {
-      name: 'Ratings',
-      selector: (row: any) => (
-        <span>
-          <FaStar className="text-yellow-primary" /> {row?.ratings}
-        </span>
-      ),
     },
     {
       name: 'Contact',
@@ -102,10 +94,10 @@ export const Customer = () => {
 
   return (
     <Table
-      heading="Customers"
+      heading="Products"
       columns={columns}
       data={users}
-      filterByDays={true}
+      filterByDays={false}
     />
   );
 };
