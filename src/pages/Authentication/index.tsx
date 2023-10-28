@@ -47,7 +47,8 @@ export const SignIn = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      dispatch(onLoginUser(values));
+      navigate('/clients');
+      // dispatch(onLoginUser(values));
     },
   });
 
