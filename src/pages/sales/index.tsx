@@ -13,7 +13,7 @@ import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
 import DefaultLayout from '../../layout/DefaultLayout';
 
-export const Staff = () => {
+export const Sales = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
   const { users } = useSelector((state: any) => state.Users);
@@ -37,8 +37,8 @@ export const Staff = () => {
 
   const columns = [
     {
-      name: 'Staff',
-      selector: 'Staff',
+      name: 'Sales',
+      selector: 'Sales',
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
@@ -96,7 +96,7 @@ export const Staff = () => {
   return (
     <DefaultLayout>
       <Table
-        heading="Staff"
+        heading="Sales"
         columns={columns}
         data={users}
         filterByDays={false}

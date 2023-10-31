@@ -112,9 +112,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 {/* <!-- Menu Item Calendar --> */}
                 <li>
                   <NavLink
-                    to="/"
+                    to="/home"
                     className={`sidebar-item-inactive ${
-                      pathname.includes('order') && 'sidebar-item-active'
+                      pathname.includes('home') && 'sidebar-item-active'
                     }`}
                   >
                     <HiHome /> <span>Home</span>
@@ -163,9 +163,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
                 <li>
                   <NavLink
-                    to="/settings"
+                    to="/sales"
                     className={`sidebar-item-inactive ${
-                      pathname.includes('settings') && 'sidebar-item-active'
+                      pathname.includes('sales') && 'sidebar-item-active'
                     }`}
                   >
                     <BiBarChartSquare /> <span>Sales</span>

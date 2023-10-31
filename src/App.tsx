@@ -33,6 +33,9 @@ import { Clients } from './pages/clients';
 import { Staff } from './pages/staff';
 import { Products } from './pages/products';
 import { Services } from './pages/services';
+import ECommerce from './pages/Dashboard/ECommerce';
+import { Home } from './pages/home';
+import { Sales } from './pages/sales';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -63,12 +66,16 @@ function App() {
                 <Route path="/reset-password-email" element={<ResetPasswordEmail />} />
                 <Route path="/reset-password-otp" element={<ResetPasswordOtp />} />
 
+                <Route path="/home" element={<Home />} />
                 <Route path="/clients" element={<Clients />} />
                 <Route path="/customers" element={<Customer />} />
                 <Route path="/staff" element={<Staff />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/chart" element={<Chart />} /> 
                 <Route path="/services" element={<Services />} /> 
+                <Route path="/sales" element={<Sales />} /> 
+                <Route path="/ecommerce" element={<ECommerce />} /> 
+                
                 {/* <Route path="/chat" element={<ChatComponent />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/order-detail" element={<OrderDetail />} />

@@ -11,6 +11,7 @@ import { calculateAge } from '../../utils/functions';
 import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
+import DefaultLayout from '../../layout/DefaultLayout';
 
 export const Services = () => {
   const navigate = useNavigate();
@@ -93,11 +94,13 @@ export const Services = () => {
   ] as any;
 
   return (
-    <Table
-      heading="Services"
-      columns={columns}
-      data={users}
-      filterByDays={false}
-    />
+    <DefaultLayout>
+      <Table
+        heading="Services"
+        columns={columns}
+        data={users}
+        filterByDays={false}
+      />
+    </DefaultLayout>
   );
 };
