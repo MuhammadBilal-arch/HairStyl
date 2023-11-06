@@ -35,20 +35,14 @@ export const Staff = () => {
     return name;
   };
 
+
   const columns = [
     {
       name: 'Staff',
       selector: 'Staff',
       width: '250px', // Specify the width here
       cell: (row: any) => (
-        <div
-          className="flex w-full cursor-pointer items-center space-x-2 text-purple-primary"
-          onClick={() =>
-            navigate('/customer-detail', {
-              state: row,
-            })
-          }
-        >
+        <div className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary">
           <img
             src={ASSETS.AUTH.SIGN_IN_COVER}
             alt=""
@@ -61,25 +55,25 @@ export const Staff = () => {
     },
     {
       name: 'Shop',
-      selector: (row: any) => calculateAge(row.city),
+      selector: (row: any) => (
+        <div className="font-semibold text-black-primary">
+          {row.shop || 'Lahore'}{' '}
+        </div>
+      ),
     },
     {
       name: 'Contact',
-      selector: (row: any) => row?.phone,
+      selector: (row: any) => (
+        <span className="font-semibold text-black-primary">{row?.phone}</span>
+      ),
     },
     {
-      name: 'Status',
-      selector: (row: any) =>
-        row?.status ? (
-          <div className="rounded-2xl bg-blue-light px-4  py-0.5 font-semibold text-blue-primary">
-            <span className="mr-1 text-xl text-green-base">•</span> Active
-          </div>
-        ) : (
-          <div className="rounded-2xl bg-blue-light px-4  py-0.5 font-semibold text-blue-primary">
-            <span className="mr-1 text-xl text-red-delete">•</span> Inactive
-          </div>
-        ),
+      name: 'Sales',
+      selector: (row: any) => (
+        <span className="font-semibold text-black-primary">{row?.sales || "€560"}</span>
+      ),
     },
+
     {
       name: 'Hide/Block',
       selector: (row: any) => (
@@ -91,7 +85,7 @@ export const Staff = () => {
         />
       ),
     },
-  ] as any;
+  ] as any
 
   return (
     <DefaultLayout>

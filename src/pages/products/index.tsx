@@ -31,10 +31,6 @@ export const Products = () => {
     setStatus(!status);
   };
 
-  const onGetName = (name) => {
-    return name;
-  };
-
   const columns = [
     {
       name: 'Products',
@@ -42,53 +38,45 @@ export const Products = () => {
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
-          className="flex w-full cursor-pointer items-center space-x-2 text-purple-primary"
           onClick={() =>
-            navigate('/customer-detail', {
+            navigate('/product-detail', {
               state: row,
             })
           }
+          className="flex w-full cursor-pointer items-center space-x-2 font-semibold"
         >
           <img
             src={ASSETS.AUTH.SIGN_IN_COVER}
             alt=""
             className="h-7 w-7 rounded-full object-cover"
           />
-          <div className=""> {onGetName(row?.fname + ' ' + row?.lname)}</div>
+          <div className=""> {row?.name || 'Men beauty kit'}</div>
         </div>
       ),
       sortable: true,
     },
     {
-      name: 'Shop',
-      selector: (row: any) => calculateAge(row.city),
-    },
-    {
-      name: 'Contact',
-      selector: (row: any) => row?.phone,
-    },
-    {
-      name: 'Status',
-      selector: (row: any) =>
-        row?.status ? (
-          <div className="rounded-2xl bg-blue-light px-4  py-0.5 font-semibold text-blue-primary">
-            <span className="mr-1 text-xl text-green-base">•</span> Active
-          </div>
-        ) : (
-          <div className="rounded-2xl bg-blue-light px-4  py-0.5 font-semibold text-blue-primary">
-            <span className="mr-1 text-xl text-red-delete">•</span> Inactive
-          </div>
-        ),
-    },
-    {
-      name: 'Hide/Block',
+      name: 'Product of shop',
       selector: (row: any) => (
-        <ToggleButton
-          onChangeStatus={onChangeStatus}
-          status={status}
-          text=""
-          id={row._id}
-        />
+        <div className="font-semibold text-black-primary">
+          {row.product || 'Circle Saloons'}
+        </div>
+      ),
+    },
+    {
+      name: 'Price',
+      selector: (row: any) => (
+        <div className="font-semibold text-black-primary">
+          {row.price || '€40'}
+        </div>
+      ),
+    },
+    {
+      name: 'Sales',
+      selector: (row: any) => (
+        <div className="font-semibold text-black-primary">
+          {row.sales || '€1340'}
+        </div>
       ),
     },
   ] as any;

@@ -48,7 +48,7 @@ export const Home = () => {
         <div
           className="flex w-full cursor-pointer items-center space-x-2 text-purple-primary"
           onClick={() =>
-            navigate('/customer-detail', {
+            navigate('/client-detail', {
               state: row,
             })
           }
@@ -121,7 +121,7 @@ export const Home = () => {
           </div>
         </div>
         <div>
-          <BarChart />
+          <BarChart /> 
         </div>
         <div className="grid grid-cols-3 gap-4 ">
           <div className="space-y-3 rounded-md bg-white p-5 text-black-primary shadow-equal">

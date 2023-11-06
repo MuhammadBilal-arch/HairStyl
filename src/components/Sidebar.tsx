@@ -124,7 +124,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   <NavLink
                     to="/clients"
                     className={`sidebar-item-inactive ${
-                      pathname.includes('clients') && 'sidebar-item-active'
+                      pathname.includes('client') && 'sidebar-item-active'
                     }`}
                   >
                     <HiUsers /> <span>Clients</span>
@@ -154,7 +154,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   <NavLink
                     to="/products"
                     className={`sidebar-item-inactive ${
-                      pathname.includes('products') && 'sidebar-item-active'
+                      pathname.includes('product') && 'sidebar-item-active'
                     }`}
                   >
                     <BsBox /> <span>Products</span>
@@ -185,9 +185,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
               <div className="border-t border-white pt-2">
                 <NavLink
-                  to="/orders"
+                  to="/account"
                   className={`sidebar-item-inactive ${
-                    pathname.includes('order') && 'sidebar-item-active'
+                    pathname.includes('account') && 'sidebar-item-active'
                   }`}
                 >
                   <MdAdminPanelSettings className="text-lg" />{' '}

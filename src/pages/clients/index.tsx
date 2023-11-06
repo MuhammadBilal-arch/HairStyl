@@ -42,9 +42,9 @@ export const Clients = () => {
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
-          className="flex w-full cursor-pointer items-center space-x-2 text-purple-primary"
+          className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary"
           onClick={() =>
-            navigate('/customer-detail', {
+            navigate('/client-detail', {
               state: row,
             })
           }
@@ -61,19 +61,26 @@ export const Clients = () => {
     },
     {
       name: 'City',
-      selector: (row: any) => calculateAge(row.city),
+      selector: (row: any) => (
+        <div className="font-medium text-black-primary">
+          {row.city || 'Lahore'}{' '}
+        </div>
+      ),
     },
     {
       name: 'Ratings',
       selector: (row: any) => (
-        <span>
-          <FaStar className="text-yellow-primary" /> {row?.ratings}
+        <span className="flex space-x-1 font-medium text-black-primary">
+          <FaStar className="text-yellow-primary" />{' '}
+          <span>{row?.ratings || '5.0'}</span>
         </span>
       ),
     },
     {
       name: 'Contact',
-      selector: (row: any) => row?.phone,
+      selector: (row: any) => (
+        <span className="font-medium text-black-primary">{row?.phone}</span>
+      ),
     },
     {
       name: 'Status',

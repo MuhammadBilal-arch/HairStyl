@@ -97,7 +97,7 @@ export const AdminOrderDetail = () => {
                 <div
                   className="cursor-pointer text-purple-primary"
                   onClick={() =>
-                    navigate('/customer-detail', {
+                    navigate('/client-detail', {
                       state: data.customer_id
                     })
                   }

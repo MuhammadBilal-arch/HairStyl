@@ -123,7 +123,7 @@ export const BarChart = () => {
   const ref = useRef();
 
   return (
-    <div>
+    <div className='space-y-4'>
       <div className="flex items-start justify-between">
         <h1 className="text-normal font-semibold text-black-primary md:text-xl lg:text-2xl xl:text-4xl">
           $28,078.50

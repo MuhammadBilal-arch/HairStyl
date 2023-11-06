@@ -15,8 +15,8 @@ export const ToggleButton = ({
       // Add other styles for checked state as needed
     },
     unchecked: {
-      backgroundColor: backgroundUnchecked || 'bg-gray-extraLight',
-      UnCheckedToggleButtonColor: UnCheckedToggleButtonColor || 'bg-gray-extraLight',
+      backgroundColor: backgroundUnchecked || 'bg-black-primary',
+      UnCheckedToggleButtonColor: UnCheckedToggleButtonColor || 'bg-yellow-primary',
       // Add other styles for unchecked state as needed
     },
   }; 

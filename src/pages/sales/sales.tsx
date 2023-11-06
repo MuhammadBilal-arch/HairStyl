@@ -11,9 +11,14 @@ import { calculateAge } from '../../utils/functions';
 import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { BarChart } from '../../components/chart';
+import DropdownNotification from '../../components/DropdownNotification';
+import { ChartLine } from '../../components/ChartLine';
 
-export const Sales = () => {
+export const SalesDetail = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
   const { users } = useSelector((state: any) => state.Users);
@@ -37,14 +42,14 @@ export const Sales = () => {
 
   const columns = [
     {
-      name: 'Sales',
-      selector: 'Sales',
+      name: 'Clients',
+      selector: 'clients',
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
-          className="flex w-full font-semibold cursor-pointer items-center space-x-2 text-purple-primary"
+          className="flex w-full cursor-pointer items-center space-x-2 text-purple-primary"
           onClick={() =>
-            navigate('/sales-detail', {
+            navigate('/client-detail', {
               state: row,
             })
           }
@@ -60,8 +65,16 @@ export const Sales = () => {
       sortable: true,
     },
     {
-      name: 'Shop',
+      name: 'City',
       selector: (row: any) => calculateAge(row.city),
+    },
+    {
+      name: 'Ratings',
+      selector: (row: any) => (
+        <span>
+          <FaStar className="text-yellow-primary" /> {row?.ratings}
+        </span>
+      ),
     },
     {
       name: 'Contact',
@@ -95,12 +108,35 @@ export const Sales = () => {
 
   return (
     <DefaultLayout>
-      <Table
-        heading="Sales"
-        columns={columns}
-        data={users}
-        filterByDays={false}
-      />
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-normal font-semibold text-black-primary md:text-lg">
+            Sales
+          </h1>
+
+          <div className="flex items-center gap-3 2xsm:gap-7">
+            <ul className="flex items-center gap-2 2xsm:gap-4">
+              {/* <!-- Notification Menu Area --> */}
+              <DropdownNotification />
+            </ul>
+          </div>
+        </div>
+        <div>
+        <BarChart /> 
+        </div>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="col-span-2">
+            <ChartLine />
+          </div>
+        </div>
+
+        <Table
+          heading="Registered clients"
+          columns={columns}
+          data={users}
+          filterByDays={false}
+        />
+      </div>
     </DefaultLayout>
   );
 };

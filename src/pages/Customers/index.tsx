@@ -37,18 +37,11 @@ export const Customer = () => {
 
   const columns = [
     {
-      name: 'Clients',
-      selector: 'clients',
+      name: 'Customers',
+      selector: 'Customers',
       width: '250px', // Specify the width here
       cell: (row: any) => (
-        <div
-          className="flex w-full cursor-pointer items-center space-x-2 text-purple-primary"
-          onClick={() =>
-            navigate('/customer-detail', {
-              state: row,
-            })
-          }
-        >
+        <div className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary">
           <img
             src={ASSETS.AUTH.SIGN_IN_COVER}
             alt=""
@@ -61,33 +54,33 @@ export const Customer = () => {
     },
     {
       name: 'City',
-      selector: (row: any) => calculateAge(row.city),
+      selector: (row: any) => (
+        <div className="font-semibold text-black-primary">
+          {row.city || 'Lahore'}{' '}
+        </div>
+      ),
     },
     {
-      name: 'Ratings',
+      name: 'Gender',
       selector: (row: any) => (
-        <span>
-          <FaStar className="text-yellow-primary" /> {row?.ratings}
-        </span>
+        <div className="font-semibold text-black-primary">
+          {row.gender || 'Male'}{' '}
+        </div>
       ),
     },
     {
       name: 'Contact',
-      selector: (row: any) => row?.phone,
+      selector: (row: any) => (
+        <span className="font-semibold text-black-primary">{row?.phone}</span>
+      ),
     },
     {
-      name: 'Status',
-      selector: (row: any) =>
-        row?.status ? (
-          <div className="rounded-2xl bg-blue-light px-4  py-0.5 font-semibold text-blue-primary">
-            <span className="mr-1 text-xl text-green-base">•</span> Active
-          </div>
-        ) : (
-          <div className="rounded-2xl bg-blue-light px-4  py-0.5 font-semibold text-blue-primary">
-            <span className="mr-1 text-xl text-red-delete">•</span> Inactive
-          </div>
-        ),
+      name: 'Spending',
+      selector: (row: any) => (
+        <span className="font-semibold text-black-primary">{row?.spending || "€560"}</span>
+      ),
     },
+
     {
       name: 'Hide/Block',
       selector: (row: any) => (
