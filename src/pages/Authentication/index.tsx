@@ -23,11 +23,8 @@ export const SignIn = () => {
   useEffect(() => {
     if (isLoadingRef.current && !isLoading && error === null) {
       if (isLogged) {
-        if (user?.accountType === 'SUPER_ADMIN') {
-          navigate('/dispensaries');
-        } else {
-          navigate('/orders');
-        }
+
+          navigate('/home');
       }
     }
     isLoadingRef.current = isLoading;
@@ -47,8 +44,8 @@ export const SignIn = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      navigate('/home');
-      // dispatch(onLoginUser(values));
+      // navigate('/home');
+      dispatch(onLoginUser(values));
     },
   });
 

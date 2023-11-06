@@ -8,10 +8,12 @@ export const ChartLine: React.FC = () => {
       {
         name: 'Purple Line',
         data: [44, 55, 41, 67, 22, 43, 65, 9, 22, 1, 99, 9],
+        strokeWidth: 3,
       },
       {
         name: 'Aqua Line',
         data: [13, 23, 20, 8, 13, 27, 15, 44, 55, 41, 67,12],
+        strokeWidth: 3,
       },
     ],
   });
@@ -44,7 +46,15 @@ export const ChartLine: React.FC = () => {
         'Nov',
         'Dec',
       ],
+      // axisBorder: {
+      //   color: '#333', // Color of the x-axis line
+      //   width: 2,      // Width of the x-axis line
+      // },
     },
+    // axisBorder: {
+    //   color: '#333', // Color of the y-axis line
+    //   width: 2,      // Width of the y-axis line
+    // },
     legend: {
       position: 'top',
       horizontalAlign: 'left',

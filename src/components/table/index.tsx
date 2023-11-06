@@ -10,6 +10,7 @@ import { PaginationComponent } from './pagination';
 
 import { ASSETS } from '../../images/path';
 import { BsFilter } from 'react-icons/bs';
+import { CustomSelect } from '../select/index.jsx';
 
 export const Table = ({ heading, columns, data, filterByDays }) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,6 +20,7 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
   const location = useLocation();
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [filterActive, setFilterActive] = useState('All time');
+  const [filterMore, setFilterMore] = useState(false);
 
   const customStyles = {
     rows: {
@@ -61,12 +63,12 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
   };
 
   return (
-    <div>
-      <div className="flex items-start justify-between">
+    <div className="space-y-2">
+      <div className="flex items-start justify-between pb-4">
         <h1 className="text-normal flex items-center space-x-2 font-semibold text-black-primary md:text-xl">
           <FaArrowLeft className="text-lg font-normal" /> <span>{heading}</span>
         </h1>
-        {filterByDays && ( 
+        {filterByDays && (
           <div className="flex h-8 items-center space-x-6  border-b border-gray-normal text-sm font-medium md:text-base">
             <div
               className={`${
@@ -116,13 +118,24 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
           </div>
         )}
       </div>
-      <div className="items-center flex justify-between py-5">
+      <div className="flex items-center justify-between">
         <div className="flex space-x-2">
-          <button className="flex items-center space-x-2 bg-gray-xl py-1 px-4 font-semibold text-gray-base">
+          {/* <button className="flex items-center space-x-2 bg-gray-xl py-1 px-4 font-semibold text-gray-base">
             <span>All</span>
             <FaTimes />
-          </button>
-          <button className="spaace-x-2 flex items-center space-x-2 border border-gray-normal px-4">
+          </button> */}
+          <CustomSelect
+            options={[
+              { value: 'All', label: 'All' },
+              { value: 'Top rated', label: 'Top rated' },
+              { value: 'Top selling', label: 'Top selling' },
+              { value: 'Active', label: 'Active' },
+            ]}
+          />
+          <button
+            onClick={() => setFilterMore(!filterMore)}
+            className="flex items-center space-x-2 whitespace-nowrap border border-gray-normal px-4"
+          >
             <BsFilter />
             <span>More filters</span>
           </button>
@@ -138,10 +151,35 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
           />
         </div>
       </div>
-
+      {filterMore && (
+        <div className="grid grid-cols-5 gap-2">
+          <CustomSelect
+            options={[
+              { value: 'All products', label: 'All products' },
+              { value: 'All services', label: 'All services' },
+              { value: 'Products & services', label: 'Products & services' },
+            ]}
+          />
+          <CustomSelect
+            options={[
+              { value: 'Top selling services', label: 'Top selling services' },
+              { value: 'Top selling shops', label: 'Top selling shops' },
+              { value: 'Top selling products', label: 'Top selling products' },
+            ]}
+          />
+          <CustomSelect
+            options={[
+              { value: 'Yesterday', label: 'Yesterday' },
+              { value: 'Last week', label: 'Last week' },
+              { value: 'Last month', label: 'Last month' },
+              { value: 'All time', label: 'All time' },
+            ]}
+          />
+        </div>
+      )}
       <DataTable
         // title="Vehicle Management"
-        className="font-semibold text-black-primary"
+        className="z-0 font-semibold text-black-primary"
         columns={columns}
         data={paginatedData}
         pagination

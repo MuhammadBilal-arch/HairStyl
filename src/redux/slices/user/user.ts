@@ -31,18 +31,13 @@ export const userSlice = createSlice({
       state.error = null;
     });
     builder.addCase(onLoginUser.fulfilled, (state, action) => {
-      if(action.payload.data.accountType === 'CLIENT')
-      {
-        state.isLoading = false;
-        showToast('Invalid Credentials', TOAST_TYPE.info);
-      }
-      else {
+     
         state.isLoading = false;
         state.user = action.payload?.data;
         state.isLogged = true;
         setLocalStorage('Token', action?.payload?.data?.token);
         showToast(action?.payload?.message, TOAST_TYPE.success);
-      }
+      
     });
     builder.addCase(onLoginUser.rejected, (state, action) => {
       state.isLoading = false;
