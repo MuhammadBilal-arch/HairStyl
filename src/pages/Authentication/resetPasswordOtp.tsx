@@ -59,22 +59,22 @@ export const ResetPasswordOtp = () => {
   });
 
   return (
-    <div className="flex h-screen max-h-screen flex-col justify-between p-2 md:p-4">
+    <div className="flex h-screen max-h-screen flex-col justify-between p-2 md:p-4 ">
       <div
         style={{
           backgroundImage: `url(${ASSETS.AUTH.RESET_PASSWORD_COVER})`,
         }}
-        className="h-full bg-top bg-no-repeat md:bg-contain"
+        className="h-1/2 w-full bg-top bg-no-repeat md:bg-cover rounded-3xl"
       >
         <div className="mb-10 px-5 pt-5 text-base font-semibold text-black-primary sm:text-lg md:text-xl lg:text-2xl xl:py-5 2xl:py-5">
           Hairstyl
         </div>
         <div className="flex flex-col items-center justify-center space-y-6">
           <img src={ASSETS.AUTH.SEARCH_SELECT_STYL} alt="" className="h-14" />
-          <div className="flex h-full w-full flex-col justify-center space-y-14 rounded-lg bg-white px-5 pb-10 shadow-equal sm:w-80">
+          <div className="flex h-full w-full flex-col justify-center space-y-14 rounded-tl-xl rounded-br-xl bg-white px-5 pb-10 shadow-equal sm:w-80">
             <form
               onSubmit={formik.handleSubmit}
-              className="flex w-full flex-col rounded-xl  text-black-primary"
+              className="flex w-full flex-col  text-black-primary"
             >
               <div className="my-5 flex w-full flex-col space-y-2">
                 <h1 className=" w-full  text-xl font-bold md:text-2xl">
@@ -88,7 +88,7 @@ export const ResetPasswordOtp = () => {
                 <OTPInput
                   containerStyle={{ width: '100%' }}
                   value={otp}
-                  isInputNum={true}
+                  // isInputNum={true}
                   onChange={onEnterCode}
                   numInputs={5}
                   renderInput={(props) => <input {...props} />}

@@ -17,6 +17,7 @@ import DefaultLayout from '../../layout/DefaultLayout';
 import { BarChart } from '../../components/chart';
 import DropdownNotification from '../../components/DropdownNotification';
 import { ChartLine } from '../../components/ChartLine';
+import { PieChart } from '../../components/chart/pie';
 
 export const SalesDetail = () => {
   const navigate = useNavigate();
@@ -122,11 +123,19 @@ export const SalesDetail = () => {
           </div>
         </div>
         <div>
-        <BarChart /> 
+          <BarChart />
         </div>
         <div className="grid grid-cols-3 gap-2">
           <div className="col-span-2">
             <ChartLine />
+          </div>
+          <div className="bg-gray-100 overflow-hidden rounded-xl  object-contain p-3 shadow-md">
+            <PieChart 
+              title="Sales by gender"
+              labels={['Male', 'Female']}
+              background={['#F4EBFF', '#7F56D9']}
+              data={[500, 1000]}
+            />
           </div>
         </div>
 

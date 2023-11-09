@@ -6,7 +6,7 @@ module.exports = {
   darkMode: 'class',
   theme: {
     fontFamily: {
-      satoshi: ['Satoshi', 'sans-serif'],
+      unbounded: ['Unbounded', 'sans-serif'],
     },
     colors: {
       current: 'currentColor',
@@ -23,6 +23,7 @@ module.exports = {
       green: {
         light: '#ECFDF3',
         base: '#14BA6D',
+        checked:"#12B76A"
       },
       black: {
         base: '#333333',

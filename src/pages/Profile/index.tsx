@@ -1,10 +1,7 @@
 import DefaultLayout from '../../layout/DefaultLayout';
 
 import { useState, useRef } from 'react';
-import { FaStar, FaTimes } from 'react-icons/fa';
-import { BiImageAdd } from 'react-icons/bi';
 
-import { BtnFilled, PurpleOutlineBtn } from '../../components/button';
 import { useSelector } from 'react-redux';
 import { BASE_URL } from '../../utils/urls';
 import { useDispatch } from 'react-redux';
@@ -15,7 +12,7 @@ import { ASSETS } from '../../images/path';
 import { InputWithLabel } from '../../components/inputWithLabel';
 import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { MdAdminPanelSettings, MdOutlineModeEditOutline } from 'react-icons/md';
-import { BsArrowUpRight } from 'react-icons/bs';
+import { FiArrowUpRight } from 'react-icons/fi';
 
 export const Profile = () => {
   const dispatch = useDispatch<any>();
@@ -75,11 +72,11 @@ export const Profile = () => {
 
   return (
     <DefaultLayout>
-      <div className="relative  bg-green-base">
+      <div className="relative">
         <img
           src={ASSETS.PROFILE.PROFILE_COVER}
           alt=""
-          className="h-52 object-cover"
+          className="h-52 w-full object-cover"
         />
         <div className="absolute -bottom-26 flex w-full flex-col items-center justify-between md:flex-row">
           <div className="flex items-center">
@@ -113,7 +110,7 @@ export const Profile = () => {
                         onClick={()=> navigate('/reset-password-email')}
             className="flex items-center space-x-1 bg-black-primary px-2 py-1.5 text-sm text-white">
               <div>Reset Password </div>
-              <div><BsArrowUpRight/></div>
+              <div><FiArrowUpRight className="text-lg"/></div>
             </button>
           </div>
         </div>

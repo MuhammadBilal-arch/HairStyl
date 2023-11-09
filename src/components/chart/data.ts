@@ -3,7 +3,7 @@ export const Days = [
     'Monday',
     'Tuesday',
     'Wednesday',
-    'Thurdsday',
+    'Thursday',
     'Friday',
     'Saturday',
     'Sunday',

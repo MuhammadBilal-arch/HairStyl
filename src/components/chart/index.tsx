@@ -70,7 +70,35 @@ export const BarChart = () => {
     });
     setChartOptions({
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return ''; // Return an empty string to hide the default label
+            },
+            afterLabel: function (context) {
+              const datasetIndex = context.datasetIndex;
+              const sales =
+                chartData.datasets[datasetIndex].data[context.dataIndex];
+              // const profits = getProfitsForIndex(context.dataIndex); // Replace this with your logic to get profits for the index
+              
+              const salesLabel = `Sales: ${sales}`;
+              const profitsLabel = `Profits: 5`; // Replace this with your actual profits value
+        
+              return salesLabel + '\n' + profitsLabel;
+            },
+          },
+          displayColors: false, // Hide the color box next to the label
+          backgroundColor: 'rgba(0, 0, 0, 0.8)', // Set background color for the tooltip
+          titleFontColor: '#BF360C', // Set font color for the title (if you have one)
+          bodyFontColor: '#333', // Set font color for the body of the tooltip
+          bodyAlign: 'left', // Align the text to the left
+          padding: 10, // Add padding to the tooltip content
+          cornerRadius: 5, // Optional: Add border radius to the tooltip
+        },
+        
+        
         grouped: true,
         legend: {
           display: false,
@@ -100,14 +128,6 @@ export const BarChart = () => {
         },
         y: {
           display: false,
-          // beginAtZero: false,
-          // ticks: {
-          //     // color: 'white',
-          //     stepSize: 25,
-          //     callback: function (value: number) {
-          //         return `${value}%`
-          //     },
-          // },
           grid: {
             drawBorder: false,
             display: false,
@@ -123,7 +143,7 @@ export const BarChart = () => {
   const ref = useRef();
 
   return (
-    <div className='space-y-4'>
+    <div className="space-y-4">
       <div className="flex items-start justify-between">
         <h1 className="text-normal font-semibold text-black-primary md:text-xl lg:text-2xl xl:text-4xl">
           $28,078.50
@@ -181,7 +201,7 @@ export const BarChart = () => {
           </div>
         </div>
       </div>
-      <div className="h-[95%] w-[90%]   lg:w-full ">
+      <div className="h-[400px] w-full bg-gray-light pt-5">
         <Bar options={chartOptions} ref={ref} data={chartData} />
       </div>
     </div>

@@ -21,7 +21,7 @@ export const ToggleButton = ({
     },
   }; 
   return (
-    <div className=" mt-4 flex space-x-2">
+    <div className=" mt-4 flex items-center space-x-2">
       <div className="relative mr-2 inline-block w-10 select-none align-middle transition duration-200 ease-in">
         <input
           onChange={onChangeStatus}
@@ -29,7 +29,7 @@ export const ToggleButton = ({
           name="toggle"
           id={id}
           checked={status}
-          className={`toggle-checkbox absolute top-0.5 bottom-0.5  block h-4 w-4 cursor-pointer appearance-none rounded-full ${
+          className={`toggle-checkbox absolute my-[3px] mx-0.5  block h-3.5 w-3.5 cursor-pointer appearance-none rounded-full ${
             status
               ? toggleStyles.checked.CheckedToggleButtonColor
               : toggleStyles.unchecked.UnCheckedToggleButtonColor

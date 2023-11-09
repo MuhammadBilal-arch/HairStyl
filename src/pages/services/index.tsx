@@ -41,14 +41,7 @@ export const Services = () => {
       selector: 'Services',
       width: '250px', // Specify the width here
       cell: (row: any) => (
-        <div className="flex w-full cursor-pointer items-center space-x-2 text-purple-primary">
-          <img
-            src={ASSETS.AUTH.SIGN_IN_COVER}
-            alt=""
-            className="h-7 w-7 rounded-full object-cover"
-          />
-          <div className=""> {onGetName(row?.name || 'Deep Massage')}</div>
-        </div>
+        <div className="font-semibold text-black-primary">Deep Massage</div>
       ),
       sortable: true,
     },

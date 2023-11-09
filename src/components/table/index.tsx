@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import DefaultLayout from '../../layout/DefaultLayout';
+import React, { useState } from 'react';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-
-import { FaArrowLeft, FaSearch, FaTimes } from 'react-icons/fa';
+import { DateRangePicker } from 'react-date-range';
+import { FaArrowLeft, FaSearch } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { PaginationComponent } from './pagination';
@@ -21,6 +20,10 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
   const [selectedRows, setSelectedRows] = useState<any>([]);
   const [filterActive, setFilterActive] = useState('All time');
   const [filterMore, setFilterMore] = useState(false);
+
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const customStyles = {
     rows: {
@@ -60,6 +63,36 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
 
   const handleSearchInputChange = (event: any) => {
     setSearchValue(event.target.value);
+  };
+
+  const selectionRange = {
+    startDate: startDate,
+    endDate: endDate,
+    key: 'selection',
+  };
+
+  const handleSelect = (ranges: any) => {
+    setStartDate(ranges.selection.startDate);
+    setEndDate(ranges.selection.endDate);
+  };
+
+  const filteredRows = React.useMemo(() => {
+    if (
+      startDate.toDateString() === new Date().toDateString() ||
+      endDate.toDateString() === new Date().toDateString()
+    ) {
+      return paginatedData;
+    }
+    const start = startDate?.toISOString().substring(0, 10);
+    const end = endDate?.toISOString().substring(0, 10);
+    return paginatedData.filter((row) => {
+      const rowDate = new Date(row.updatedAt).toISOString().substring(0, 10);
+      return rowDate >= start && rowDate <= end;
+    });
+  }, [startDate, endDate, paginatedData]);
+
+  const toggleDateRange = () => {
+    setShowCalendar(!showCalendar);
   };
 
   return (
@@ -152,19 +185,12 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
         </div>
       </div>
       {filterMore && (
-        <div className="grid grid-cols-5 gap-2">
+        <div className="relative grid grid-cols-5 gap-2">
           <CustomSelect
             options={[
               { value: 'All products', label: 'All products' },
               { value: 'All services', label: 'All services' },
               { value: 'Products & services', label: 'Products & services' },
-            ]}
-          />
-          <CustomSelect
-            options={[
-              { value: 'Top selling services', label: 'Top selling services' },
-              { value: 'Top selling shops', label: 'Top selling shops' },
-              { value: 'Top selling products', label: 'Top selling products' },
             ]}
           />
           <CustomSelect
@@ -175,13 +201,72 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
               { value: 'All time', label: 'All time' },
             ]}
           />
+          <CustomSelect
+            options={[
+              { value: 'Top selling services', label: 'Top selling services' },
+              { value: 'Top selling shops', label: 'Top selling shops' },
+              { value: 'Top selling products', label: 'Top selling products' },
+            ]}
+          />
+
+          <div className='col-span-4'>
+            <div className="flex space-x-2">
+              {/* <div className="flex flex-col space-y-0.5">
+                <label
+                  htmlFor="startDate"
+                  className="text-sm font-semibold text-black-primary"
+                >
+                  Start Date
+                </label>
+                <input
+                  id="startDate"
+                  className="h-8 rounded-md border-2 border-black-primary border-opacity-20 px-2 text-sm outline-none"
+                  type="text"
+                  value={
+                    startDate ? startDate?.toISOString().substring(0, 10) : ''
+                  }
+                  onClick={toggleDateRange}
+                  readOnly
+                />
+              </div>
+              <div className="flex flex-col space-y-0.5">
+                <label
+                  htmlFor="endDate"
+                  className="text-sm font-semibold text-black-primary"
+                >
+                  End Date
+                </label>
+                <input
+                  id="endDate"
+                  className="h-8 rounded-md border-2 border-black-primary border-opacity-20 px-2 text-sm outline-none"
+                  type="text"
+                  value={
+                    startDate ? startDate?.toISOString().substring(0, 10) : ''
+                  }
+                  onClick={toggleDateRange}
+                  readOnly
+                />
+              </div> */}
+            </div>
+
+            {showCalendar && (
+              <div className="absolute right-0 top-20 z-50 flex justify-end">
+                <DateRangePicker
+                  ranges={[selectionRange]}
+                  onChange={handleSelect}
+                  showDateDisplay={false}
+                  inputRanges={[]}
+                />
+              </div>
+            )}
+          </div>
         </div>
       )}
       <DataTable
         // title="Vehicle Management"
         className="z-0 font-semibold text-black-primary"
         columns={columns}
-        data={paginatedData}
+        data={filteredRows}
         pagination
         paginationServer
         paginationTotalRows={location?.state?.length}

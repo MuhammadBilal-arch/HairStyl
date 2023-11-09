@@ -17,7 +17,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "apexcharts": "^3.37.0",
     "axios": "^1.5.0",
-    "chart.js": "^4.3.0",
+    "chart.js": "^4.4.0",
     "date-fns": "^2.30.0",
     "formik": "^2.4.4",
     "jsvectormap": "^1.5.1",
