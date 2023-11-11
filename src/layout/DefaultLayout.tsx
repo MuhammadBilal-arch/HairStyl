@@ -10,7 +10,7 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+    <div className="bg-white">
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className="flex h-screen overflow-hidden">
         {/* <!-- ===== Sidebar Start ===== --> */}
@@ -25,7 +25,7 @@ const DefaultLayout = ({ children }: DefaultLayoutProps) => {
 
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-white">
+            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10 bg-white  ">
               {children}
             </div>
           </main>
