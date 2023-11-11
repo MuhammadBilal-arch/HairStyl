@@ -62,7 +62,7 @@ const CustomOption = ({ innerProps, label, isSelected }) => (
 export const CustomSelect = ({ options }) => {
   return (
     <Select
-      className="z-1 text-sm w-42"
+      className="z-1 text-sm w-full"
       options={options}
       styles={customStyles}
       components={{

@@ -75,7 +75,7 @@ export const Staff = () => {
     },
 
     {
-      name: 'Hide/Block',
+      name: 'Hide / Unhide',
       selector: (row: any) => (
         <ToggleButton
           onChangeStatus={onChangeStatus}

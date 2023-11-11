@@ -1,25 +1,27 @@
 import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
+import { BiCloudLightning } from 'react-icons/bi';
 
 export const ChartLine: React.FC = () => {
   const [state, setState] = useState({
     series: [
       {
-        name: 'Purple Line',
-        data: [44, 55, 41, 67, 22, 43, 65, 9, 22, 1, 99, 9],
-        strokeWidth: 3,
+        name: 'Services',
+        data: [0, 5000, 10000, 12000, 13000, 12800, 9000, 10000, 13700,  13750, 13800, 13800],
       },
       {
-        name: 'Aqua Line',
-        data: [13, 23, 20, 8, 13, 27, 15, 44, 55, 41, 67,12],
-        strokeWidth: 3,
+        name: 'Products',
+        data: [3000, 5000, 8000, 9000, 10000, 10800, 8000, 9000, 10700,  11750, 13800, 13800],
       },
     ],
   });
 
   const options: ApexOptions = {
-    colors: ['#800080', '#00FFFF'], // Purple and Aqua colors
+    stroke: {
+      curve: 'smooth',
+    },
+    colors: ['#4318FF', '#6AD2FF'], // Purple and Aqua colors
     chart: {
       fontFamily: 'Satoshi, sans-serif',
       type: 'line',
@@ -46,21 +48,23 @@ export const ChartLine: React.FC = () => {
         'Nov',
         'Dec',
       ],
-      // axisBorder: {
-      //   color: '#333', // Color of the x-axis line
-      //   width: 2,      // Width of the x-axis line
-      // },
     },
-    // axisBorder: {
-    //   color: '#333', // Color of the y-axis line
-    //   width: 2,      // Width of the y-axis line
-    // },
+    yaxis: {
+      min: 0,
+      max: 20000,
+      tickAmount: 5,
+      labels: {
+        formatter: function (value) {
+          return value / 1000 + 'k'; // Divide by 1000 and append 'k' for thousands
+        },
+      },
+    },
     legend: {
       position: 'top',
       horizontalAlign: 'left',
-      fontFamily: 'Satoshi',
-      fontWeight: 500,
-      fontSize: '14px',
+      fontFamily: 'Unbounded',
+      fontWeight: 600,
+      fontSize: '16px',
       markers: {
         radius: 99,
       },
@@ -73,18 +77,13 @@ export const ChartLine: React.FC = () => {
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
       <div className="mb-4 justify-between gap-4 sm:flex">
-        <div>
-          <h4 className="text-black text-xl font-semibold dark:text-white">
-            Profit this week
-          </h4>
-        </div>
-        <div>
-          <div className="relative z-20 inline-block">
-            {/* Dropdown and icon */}
-          </div>
-        </div>
+        <h4 className="text-black text-base font-semibold dark:text-white">
+          Sales by products and services
+        </h4>
+
+        <BiCloudLightning className="cursor-pointer text-2xl" />
       </div>
-    
+
       <div>
         <div id="chartTwo" className="-ml-5 -mb-9">
           <ReactApexChart

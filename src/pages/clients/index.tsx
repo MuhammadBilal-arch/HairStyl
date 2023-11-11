@@ -96,7 +96,7 @@ export const Clients = () => {
         ),
     },
     {
-      name: 'Hide/Block',
+      name: 'Hide / Unhide',
       selector: (row: any) => (
         <ToggleButton
           onChangeStatus={onChangeStatus}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DateRangePicker } from 'react-date-range';
+import { DateRange } from 'react-date-range';
 import { FaArrowLeft, FaSearch } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
@@ -10,8 +10,9 @@ import { PaginationComponent } from './pagination';
 import { ASSETS } from '../../images/path';
 import { BsFilter } from 'react-icons/bs';
 import { CustomSelect } from '../select/index.jsx';
+import { useCalendar } from '../calendar/index.js';
 
-export const Table = ({ heading, columns, data, filterByDays }) => {
+export const Table = ({ heading, columns, data, filterByDays, goBack }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchValue, setSearchValue] = useState('');
@@ -21,9 +22,14 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
   const [filterActive, setFilterActive] = useState('All time');
   const [filterMore, setFilterMore] = useState(false);
 
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
+  const {
+    onHandleSelectedDates,
+    startDate,
+    endDate,
+    showCalendar,
+    onToggleCalendar,
+    selectionRange,
+  } = useCalendar();
 
   const customStyles = {
     rows: {
@@ -65,17 +71,6 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
     setSearchValue(event.target.value);
   };
 
-  const selectionRange = {
-    startDate: startDate,
-    endDate: endDate,
-    key: 'selection',
-  };
-
-  const handleSelect = (ranges: any) => {
-    setStartDate(ranges.selection.startDate);
-    setEndDate(ranges.selection.endDate);
-  };
-
   const filteredRows = React.useMemo(() => {
     if (
       startDate.toDateString() === new Date().toDateString() ||
@@ -91,16 +86,19 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
     });
   }, [startDate, endDate, paginatedData]);
 
-  const toggleDateRange = () => {
-    setShowCalendar(!showCalendar);
-  };
-
   return (
     <div className="space-y-2">
       <div className="flex items-start justify-between pb-4">
-        <h1 className="text-normal flex items-center space-x-2 font-semibold text-black-primary md:text-xl">
-          <FaArrowLeft className="text-lg font-normal" /> <span>{heading}</span>
-        </h1>
+        {goBack ? (
+          <h1 className="text-normal flex items-center space-x-2 font-semibold text-black-primary md:text-xl">
+            <FaArrowLeft className="text-lg font-normal" />{' '}
+            <span>{heading}</span>
+          </h1>
+        ) : (
+          <h1 className="text-normal font-semibold text-black-primary md:text-xl">
+            {heading}
+          </h1>
+        )}
         {filterByDays && (
           <div className="flex h-8 items-center space-x-6  border-b border-gray-normal text-sm font-medium md:text-base">
             <div
@@ -157,14 +155,16 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
             <span>All</span>
             <FaTimes />
           </button> */}
-          <CustomSelect
-            options={[
-              { value: 'All', label: 'All' },
-              { value: 'Top rated', label: 'Top rated' },
-              { value: 'Top selling', label: 'Top selling' },
-              { value: 'Active', label: 'Active' },
-            ]}
-          />
+          <div className="w-32">
+            <CustomSelect
+              options={[
+                { value: 'All', label: 'All' },
+                { value: 'Top rated', label: 'Top rated' },
+                { value: 'Top selling', label: 'Top selling' },
+                { value: 'Active', label: 'Active' },
+              ]}
+            />
+          </div>
           <button
             onClick={() => setFilterMore(!filterMore)}
             className="flex items-center space-x-2 whitespace-nowrap border border-gray-normal px-4"
@@ -173,13 +173,13 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
             <span>More filters</span>
           </button>
         </div>
-        <div className="flex h-8 items-center space-x-2 border border-black-primary border-opacity-30 bg-white px-4 text-sm">
-          <FaSearch className="text-black-primary text-opacity-30" />
+        <div className="flex h-8 items-center space-x-2 rounded-sm border border-black-primary border-opacity-40 bg-white px-4 text-sm">
+          <FaSearch className="text-black-primary text-opacity-40" />
           <input
             id="search"
             placeholder="Search"
             onChange={handleSearchInputChange}
-            className=" h-full text-sm font-semibold placeholder-black-primary placeholder-opacity-30 outline-none"
+            className=" h-full w-28 text-sm font-medium placeholder-black-primary placeholder-opacity-50 outline-none"
             type="text"
           />
         </div>
@@ -209,53 +209,19 @@ export const Table = ({ heading, columns, data, filterByDays }) => {
             ]}
           />
 
-          <div className='col-span-4'>
-            <div className="flex space-x-2">
-              {/* <div className="flex flex-col space-y-0.5">
-                <label
-                  htmlFor="startDate"
-                  className="text-sm font-semibold text-black-primary"
-                >
-                  Start Date
-                </label>
-                <input
-                  id="startDate"
-                  className="h-8 rounded-md border-2 border-black-primary border-opacity-20 px-2 text-sm outline-none"
-                  type="text"
-                  value={
-                    startDate ? startDate?.toISOString().substring(0, 10) : ''
-                  }
-                  onClick={toggleDateRange}
-                  readOnly
-                />
-              </div>
-              <div className="flex flex-col space-y-0.5">
-                <label
-                  htmlFor="endDate"
-                  className="text-sm font-semibold text-black-primary"
-                >
-                  End Date
-                </label>
-                <input
-                  id="endDate"
-                  className="h-8 rounded-md border-2 border-black-primary border-opacity-20 px-2 text-sm outline-none"
-                  type="text"
-                  value={
-                    startDate ? startDate?.toISOString().substring(0, 10) : ''
-                  }
-                  onClick={toggleDateRange}
-                  readOnly
-                />
-              </div> */}
-            </div>
+          <div
+           
+            className={`relative h-full w-8 cursor-pointer`}
+          >
+            <img  onClick={onToggleCalendar} src={ASSETS.ICONS.FILTER} alt="" />
 
             {showCalendar && (
-              <div className="absolute right-0 top-20 z-50 flex justify-end">
-                <DateRangePicker
+              <div className="absolute left-0 top-10 z-50 flex justify-end">
+                <DateRange
+                  editableDateInputs={true}
+                  onChange={onHandleSelectedDates}
+                  moveRangeOnFirstSelection={false}
                   ranges={[selectionRange]}
-                  onChange={handleSelect}
-                  showDateDisplay={false}
-                  inputRanges={[]}
                 />
               </div>
             )}

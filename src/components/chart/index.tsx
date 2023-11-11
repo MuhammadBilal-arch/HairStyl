@@ -127,14 +127,15 @@ export const BarChart = () => {
           //     labels: ['Great', 'Good', 'OK', 'Poor', 'Bad'],
         },
         y: {
-          display: false,
+          display: true,
           grid: {
-            drawBorder: false,
-            display: false,
-            offset: false,
+            drawBorder: true,
+            display: true,
+            offset: true,
           },
-          // max: 100,
-          // labels: ['Great', 'Good', 'OK', 'Poor', 'Bad'],
+          ticks: {
+            display: false, // Set display to false to hide y-axis labels
+          },
         },
       },
     });
@@ -201,7 +202,7 @@ export const BarChart = () => {
           </div>
         </div>
       </div>
-      <div className="h-[400px] w-full bg-gray-light pt-5">
+      <div className="h-[500px] w-full  pt-5">
         <Bar options={chartOptions} ref={ref} data={chartData} />
       </div>
     </div>

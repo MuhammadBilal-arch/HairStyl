@@ -18,6 +18,7 @@ import { BarChart } from '../../components/chart';
 import DropdownNotification from '../../components/DropdownNotification';
 import { ChartLine } from '../../components/ChartLine';
 import { PieChart } from '../../components/chart/pie';
+import ChartThree from '../../components/ChartThree';
 
 export const SalesDetail = () => {
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ export const SalesDetail = () => {
         ),
     },
     {
-      name: 'Hide/Block',
+      name: 'Hide / Unhide',
       selector: (row: any) => (
         <ToggleButton
           onChangeStatus={onChangeStatus}
@@ -125,21 +126,17 @@ export const SalesDetail = () => {
         <div>
           <BarChart />
         </div>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="col-span-2">
+        <div className="grid lg:grid-cols-5 gap-2">
+          <div className="lg:col-span-3">
             <ChartLine />
           </div>
-          <div className="bg-gray-100 overflow-hidden rounded-xl  object-contain p-3 shadow-md">
-            <PieChart 
-              title="Sales by gender"
-              labels={['Male', 'Female']}
-              background={['#F4EBFF', '#7F56D9']}
-              data={[500, 1000]}
-            />
+          <div className="lg:col-span-2 overflow-hidden object-contain rounded-sm border border-stroke bg-white py-7.5 px-5 shadow-default">
+              <PieChart/>
           </div>
         </div>
 
         <Table
+          goBack={false}
           heading="Registered clients"
           columns={columns}
           data={users}

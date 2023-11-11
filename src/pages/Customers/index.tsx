@@ -82,7 +82,7 @@ export const Customer = () => {
     },
 
     {
-      name: 'Hide/Block',
+      name: 'Hide / Unhide',
       selector: (row: any) => (
         <ToggleButton
           onChangeStatus={onChangeStatus}

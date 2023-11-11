@@ -70,8 +70,8 @@ export const Home = () => {
     {
       name: 'Ratings',
       selector: (row: any) => (
-        <span>
-          <FaStar className="text-yellow-primary" /> {row?.ratings}
+        <span className='flex space-x-2 items-center'>
+          <FaStar className="text-yellow-primary" /> <span>{row?.ratings || '5.0'}</span>
         </span>
       ),
     },
@@ -93,7 +93,7 @@ export const Home = () => {
         ),
     },
     {
-      name: 'Hide/Block',
+      name: 'Hide / Unhide',
       selector: (row: any) => (
         <ToggleButton
           onChangeStatus={onChangeStatus}
@@ -107,7 +107,7 @@ export const Home = () => {
 
   return (
     <DefaultLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 pb-10">
         <div className="flex items-center justify-between">
           <h1 className="text-normal font-semibold text-black-primary md:text-lg">
             Dashboard
@@ -123,7 +123,7 @@ export const Home = () => {
         <div>
           <BarChart /> 
         </div>
-        <div className="grid grid-cols-3 gap-4 ">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 ">
           <div className="space-y-3 rounded-md bg-white p-5 text-black-primary shadow-equal">
             <div className="flex justify-between font-medium">
               <h1>Profit on sales</h1>
@@ -180,6 +180,7 @@ export const Home = () => {
           </div>
         </div>
         <Table
+          goBack={false}
           heading="Registered clients"
           columns={columns}
           data={users}
