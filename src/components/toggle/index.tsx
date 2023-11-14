@@ -20,9 +20,9 @@ export const ToggleButton = ({
       // Add other styles for unchecked state as needed
     },
   }; 
-  console.log(id,status)
+
   return (
-    <div className=" mt-4 flex items-center space-x-2">
+    <div className="flex items-center space-x-2">
       <div className="relative mr-2 inline-block w-10 select-none align-middle transition duration-200 ease-in">
         <input
           onChange={onChangeStatus}

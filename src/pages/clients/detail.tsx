@@ -63,7 +63,7 @@ export const CustomerDetail = () => {
         </div>
         <form
           onSubmit={formik.handleSubmit}
-          className="z-50 mx-auto flex flex-col space-y-8  rounded-xl bg-grey-modal py-5"
+          className="z-50 mx-auto flex flex-col space-y-8  rounded-xl py-5"
         >
           <div className="flex flex-col space-y-2"></div>
           <div className="grid gap-4 md:grid-cols-2">

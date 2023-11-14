@@ -111,6 +111,7 @@ export const Clients = () => {
   return (
     <DefaultLayout>
       <Table
+        goBack={true}
         heading="Clients"
         columns={columns}
         data={users}

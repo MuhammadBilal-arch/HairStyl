@@ -195,17 +195,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </NavLink>
               </div>
             </div>
-            <div className="flex items-center space-x-4 border-t border-white px-4 py-2 text-white">
-              <img
-                src={ASSETS.AUTH.SIGN_IN_COVER}
-                alt=""
-                className="h-8 w-8 rounded-full object-cover"
-              />{' '}
-              <div className="flex flex-col">
-                <div className="text-base">Olivia Rhye</div>
-                <div className="text-sm">olivia@untitledui.com</div>
+            <div className="grid grid-cols-6 items-center space-x-4 w-full  border-t border-white px-4 py-2 text-white">
+              <div className="h-8 w-8 object-contain">
+                <img
+                  src={ASSETS.AUTH.SIGN_IN_COVER}
+                  alt=""
+                  className="w-full h-full rounded-full object-cover"
+                />{' '}
               </div>
-              <MdOutlineLogout className="text-sm md:text-xl" />
+              <div className="flex col-span-4 flex-col ">
+                <div className="text-sm">Olivia Rhye</div>
+                <div className="text-xs">olivia@untitledui.com</div>
+              </div>
+              <div className=''>
+                <MdOutlineLogout className="text-sm md:text-xl" />
+              </div>
             </div>
           </div>
         </nav>

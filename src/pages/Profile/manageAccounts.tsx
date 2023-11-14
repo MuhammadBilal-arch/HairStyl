@@ -97,7 +97,7 @@ export const ManageAccounts = () => {
             text=""
             id={row._id}
           />
-          <div>
+          <div className='cursor-pointer'>
             <RiDeleteBin6Line />
           </div>
         </div>

@@ -96,11 +96,13 @@ export const SignIn = () => {
                 disabled={false}
                 style={true}
               />
-              <ToggleButton
+                <div className='pt-4'>
+                <ToggleButton
                 onChangeStatus={onUpdateRememberMe}
                 status={remember}
                 text="Remember Me"
               />
+                </div>
               <div className="space-y-5 pt-4">
                 <BtnFilled
                   text="Sign In"
