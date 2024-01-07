@@ -157,9 +157,17 @@ export const Home = () => {
               data={vendors}
               fileName="Vendors"
             />
-            <div className="w-40">
+            <div 
+            style={{background:'black'}}
+            className=' w-48 flex h-9 items-center justify-between px-3 rounded-md'>
+              <div>
+                <div className='bg-green-base h-2 w-2 rounded-full'></div>
+              </div>
+            <div className="w-36">
               <CustomSelect
                 options={[
+
+                  { value: 'All', label: 'All' },
                   { value: 'All products', label: 'All products' },
                   { value: 'All services', label: 'All services' },
                   // {
@@ -167,8 +175,10 @@ export const Home = () => {
                   //   label: 'Products & services',
                   // },
                 ]}
+                background="black"
                 onSelectOption={handleSelectOption}
               />
+            </div>
             </div>
           </div>
         </div>

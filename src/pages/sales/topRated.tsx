@@ -98,6 +98,9 @@ export const TopRated = () => {
         showPagination={true}
         showBottomTab={false}
         onViewAllContent={() => navigate('')}
+        statusFilter={false}
+        rateFilter={true}
+
       />
     </DefaultLayout>
   );

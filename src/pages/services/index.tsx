@@ -67,7 +67,7 @@ export const Services = () => {
         data={services}
         filterByDays={false}
         statusFilter={true}
-        rateFilter={false}
+        rateFilter={false}        
       />
     </DefaultLayout>
   );

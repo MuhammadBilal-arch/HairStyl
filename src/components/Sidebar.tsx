@@ -130,11 +130,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
       <div className="no-scrollbar flex h-full flex-col overflow-y-auto duration-300 ease-linear">
         {/* <!-- Sidebar Menu --> */}
-        <nav className="my-5 h-full px-4 lg:my-9 lg:px-6">
+        <nav className="my-5 h-full px-4 lg:my-0 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div className="flex h-full flex-col justify-between ">
             <div>
-              <ul className="mb-6 flex flex-col gap-1">
+              <ul className="mb-6 flex flex-col gap-0.5 text-sm xl:text-base">
                 {/* <!-- Menu Item Calendar --> */}
                 <li>
                   <NavLink
@@ -229,7 +229,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </li>
               </ul>
 
-              <div className="border-t border-white pt-2">
+              <div className="border-t border-white pt-2 text-sm xl:text-base">
                 <NavLink
                   to="/account"
                   className={`sidebar-item-inactive ${
