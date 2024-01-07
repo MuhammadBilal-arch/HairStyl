@@ -5,9 +5,7 @@ import { FaStar } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-
-import { fetchUsers } from '../../redux/slices/customers';
-import { calculateAge } from '../../utils/functions';
+import { API_HANDLER } from '../../utils/functions';
 import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
@@ -16,33 +14,44 @@ import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { BarChart } from '../../components/chart';
 import DropdownNotification from '../../components/DropdownNotification';
+import { ExportToExcel } from '../../components/export';
+import { fetchVendors, onUpdateVendorStatus } from '../../redux/slices/vendors';
+import { END_POINTS } from '../../utils/endpoints';
+import { CustomSelect } from '../../components/select/index.jsx';
 
 export const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
-  const { users } = useSelector((state: any) => state.Users);
-
-  const [status, setStatus] = useState(false);
+  const [stats, setStats] = useState<any>('');
+  const { vendors } = useSelector((state: any) => state.Vendors);
 
   useEffect(() => {
-    const payload = {
-      accountType: 'CLIENT',
-    };
-    dispatch(fetchUsers(payload));
+    dispatch(fetchVendors({}));
+    onGetDashboardStats();
   }, []);
 
-  const onChangeStatus = () => {
-    setStatus(!status);
+  const onGetDashboardStats = async () => {
+    const result = await API_HANDLER('GET', END_POINTS.DASHBOARD.GET, {});
+    console.log(result);
+    if (result?.data?.status == 'success') {
+      setStats(result?.data?.data);
+    }
   };
 
-  const onGetName = (name) => {
-    return name;
+  const onChangeStatus = (user: any) => {
+    // setStatus(!status);
+
+    dispatch(
+      onUpdateVendorStatus({
+        _id: user.id,
+        status: user.status == 0 ? 1 : 0,
+      })
+    );
   };
 
   const columns = [
     {
       name: 'Clients',
-      selector: 'clients',
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
@@ -58,31 +67,32 @@ export const Home = () => {
             alt=""
             className="h-7 w-7 rounded-full object-cover"
           />
-          <div className=""> {onGetName(row?.fname + ' ' + row?.lname)}</div>
+          <div className=""> {row.name}</div>
         </div>
       ),
       sortable: true,
     },
     {
       name: 'City',
-      selector: (row: any) => calculateAge(row.city),
+      selector: (row: any) => <div>{row.city || 'N/A'}</div>,
     },
     {
       name: 'Ratings',
       selector: (row: any) => (
-        <span className='flex space-x-2 items-center'>
-          <FaStar className="text-yellow-primary" /> <span>{row?.ratings || '5.0'}</span>
+        <span className="flex items-center space-x-2">
+          <FaStar className="text-yellow-primary" />{' '}
+          <span>{row?.ratings || '5.0'}</span>
         </span>
       ),
     },
     {
       name: 'Contact',
-      selector: (row: any) => row?.phone,
+      selector: (row: any) => row?.phoneNumber,
     },
     {
       name: 'Status',
       selector: (row: any) =>
-        row?.status ? (
+        row?.status != 0 ? (
           <div className="rounded-2xl bg-blue-light px-4  py-0.5 font-semibold text-blue-primary">
             <span className="mr-1 text-xl text-green-base">•</span> Active
           </div>
@@ -96,15 +106,26 @@ export const Home = () => {
       name: 'Hide / Unhide',
       selector: (row: any) => (
         <ToggleButton
-          onChangeStatus={onChangeStatus}
-          status={status}
+          onChangeStatus={() => onChangeStatus(row)}
+          status={row.status == 0 ? false : true}
           text=""
-          id={row._id}
+          id={row.id}
         />
       ),
     },
   ] as any;
 
+  const handleSelectOption = (value: any) => {
+    if (value.value == 'All products') {
+      navigate('/products')
+    }
+    if (value.value == 'All services') {
+      navigate('/services-list')
+    }
+    if (value.value == 'asda') {
+      navigate('/services')
+    }
+  };
   return (
     <DefaultLayout>
       <div className="space-y-6 pb-10">
@@ -118,20 +139,57 @@ export const Home = () => {
               {/* <!-- Notification Menu Area --> */}
               <DropdownNotification />
             </ul>
+            <ExportToExcel
+              columns={[
+                'id',
+                'name',
+                'city',
+                'country',
+                'ratings',
+                'phoneNumber',
+                'email',
+                'shopName',
+                'age',
+                'image',
+                'userType',
+                'status',
+              ]}
+              data={vendors}
+              fileName="Vendors"
+            />
+            <div className="w-40">
+              <CustomSelect
+                options={[
+                  { value: 'All products', label: 'All products' },
+                  { value: 'All services', label: 'All services' },
+                  // {
+                  //   value: 'Products & services',
+                  //   label: 'Products & services',
+                  // },
+                ]}
+                onSelectOption={handleSelectOption}
+              />
+            </div>
           </div>
         </div>
         <div>
-          <BarChart /> 
+          <BarChart />
         </div>
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 ">
+        {/* STATS */}
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 ">
           <div className="space-y-3 rounded-md bg-white p-5 text-black-primary shadow-equal">
             <div className="flex justify-between font-medium">
               <h1>Profit on sales</h1>
-              <BsThreeDotsVertical />
+              <BsThreeDotsVertical
+                className="cursor-pointer"
+                onClick={() => navigate('/sales')}
+              />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-2">
-                <div className="text-xl font-semibold">€10,000</div>
+                <div className="text-xl font-semibold">
+                  €{stats?.Total || 0}
+                </div>
                 <div className="flex items-center space-x-2 text-xs font-medium xl:text-sm">
                   <span className="flex items-center space-x-2 text-green-base">
                     <AiOutlineArrowUp /> <div>10%</div>
@@ -145,11 +203,14 @@ export const Home = () => {
           <div className="space-y-3 rounded-md bg-white p-5 text-black-primary shadow-equal">
             <div className="flex justify-between font-medium">
               <h1>Total customers</h1>
-              <BsThreeDotsVertical />
+              <BsThreeDotsVertical
+                className="cursor-pointer"
+                onClick={() => navigate('/customers')}
+              />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-2">
-                <div className="text-xl font-semibold">3664</div>
+                <div className="text-xl font-semibold">{stats?.Users || 0}</div>
                 <div className="flex items-center space-x-2 text-xs font-medium xl:text-sm">
                   <span className="flex items-center space-x-2 text-red-delete">
                     <AiOutlineArrowDown /> <div>10%</div>
@@ -163,11 +224,16 @@ export const Home = () => {
           <div className="space-y-3 rounded-md bg-white p-5 text-black-primary shadow-equal">
             <div className="flex justify-between font-medium">
               <h1>Total clients</h1>
-              <BsThreeDotsVertical />
+              <BsThreeDotsVertical
+                className="cursor-pointer"
+                onClick={() => navigate('/clients')}
+              />
             </div>
             <div className="flex items-center justify-between">
               <div className="space-y-2">
-                <div className="text-xl font-semibold">750</div>
+                <div className="text-xl font-semibold">
+                  {stats?.Vendors || 0}
+                </div>
                 <div className="flex items-center space-x-2 text-xs font-medium xl:text-sm">
                   <span className="flex items-center space-x-2 text-green-base">
                     <AiOutlineArrowUp /> <div>10%</div>
@@ -183,8 +249,13 @@ export const Home = () => {
           goBack={false}
           heading="Registered clients"
           columns={columns}
-          data={users}
+          data={vendors}
           filterByDays={false}
+          showPagination={false}
+          showBottomTab={true}
+          onViewAllContent={() => navigate('/home-detail')}
+          statusFilter={true}
+          rateFilter={true}
         />
       </div>
     </DefaultLayout>

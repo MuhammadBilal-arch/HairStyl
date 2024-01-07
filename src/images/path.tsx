@@ -13,6 +13,8 @@ import SWIPER_2 from './swiper/Rectangle 116.png';
 import SWIPER_3 from './swiper/Rectangle 117.png';
 import PROFILE_COVER from './cover/profile-cover.png';
 import PROFILE_AVATAR from './cover/profile-avatar.png';
+import CATEGORY_ICON from './icon/category-icon.svg';
+import DUMMY_IMAGE from './mix/dummy-profile-image.png';
 
 export const ASSETS = {
   LOGO,
@@ -40,4 +42,8 @@ export const ASSETS = {
     PROFILE_AVATAR,
     PROFILE_COVER,
   },
+  CATEGORY:{
+    CATEGORY_ICON
+  },
+  DUMMY_IMAGE
 };

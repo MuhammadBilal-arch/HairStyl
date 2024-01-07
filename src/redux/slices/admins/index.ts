@@ -1,64 +1,54 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   API_HANDLER,
-  API_HANDLER_FORM_DATA,
-  showToast,
 } from '../../../utils/functions';
 import { END_POINTS } from '../../../utils/endpoints';
-// import { TOAST_TYPE } from "../../../utils/constants";
+
 
 const initialState = {
-  users: [],
+  admins: [],
   isLoading: false,
   error: null,
 };
 
-export const userSlice = createSlice({
-  name: 'users',
+export const adminSlice = createSlice({
+  name: 'admins',
   initialState,
   reducers: {
     onResetUsersList() {
       return initialState;
     },
-
-    // onUpdateUserStatus: (state, action) => {
-    //   console.log(action.payload)
-    //   const userIndex = state.users.findIndex((item) => item?.id == action?.payload?._id);
-    //   if (userIndex !== -1) { 
-    //     state.users[userIndex].status = action.payload.status
-    //   }
-    // }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchUsers.pending, (state) => {
+    builder.addCase(fetchAdmins.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(fetchUsers.fulfilled, (state, action) => {
+    builder.addCase(fetchAdmins.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = null;
-      state.users = action.payload.data != null ? action.payload.data : [];
+      console.log(action.payload, 'action.payload');
+      state.admins = action.payload.data != null ? action.payload.data : [];
     });
-    builder.addCase(fetchUsers.rejected, (state, action) => {
+    builder.addCase(fetchAdmins.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action?.payload;
       // showToast(action.payload.message || "Error Occurred.", TOAST_TYPE.error);
     });
 
-    builder.addCase(onUpdateUserStatus.pending, (state) => {
+    builder.addCase(onUpdateAdminStatus.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(onUpdateUserStatus.fulfilled, (state, action) => {
+    builder.addCase(onUpdateAdminStatus.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = null;
-      const userIndex = state.users.findIndex((item) => item?.id === action?.payload?._id);
+      const userIndex = state.admins.findIndex((item) => item?.id === action?.payload?._id);
       if (userIndex !== -1) {
-   
-        state.users[userIndex].status = action.payload.status;
+        state.admins[userIndex].status = action.payload.status;
       }
     });
-    builder.addCase(onUpdateUserStatus.rejected, (state, action) => {
+    builder.addCase(onUpdateAdminStatus.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action?.payload;
       // showToast(action.payload.message || "Error Occurred.", TOAST_TYPE.error);
@@ -66,13 +56,13 @@ export const userSlice = createSlice({
   },
 });
 
-export const fetchUsers = createAsyncThunk(
-  'users/fetchUsers',
+export const fetchAdmins = createAsyncThunk(
+  'admins/fetchAdmins',
   async (payload:any, { rejectWithValue }) => {
     try {
       const result = await API_HANDLER(
         'GET',
-        END_POINTS.USERS.GET_ALL,
+        END_POINTS.ADMINS.GET_ALL,
         payload
       );
       const data = await result.data;
@@ -83,8 +73,8 @@ export const fetchUsers = createAsyncThunk(
   }
 );
 
-export const onUpdateUserStatus = createAsyncThunk(
-  'users/onUpdateUserStatus',
+export const onUpdateAdminStatus = createAsyncThunk(
+  'users/onUpdateAdminStatus',
   async (payload:any, { rejectWithValue }) => {
     try {
       const result = await API_HANDLER(
@@ -100,6 +90,7 @@ export const onUpdateUserStatus = createAsyncThunk(
   }
 );
 
-export const { onResetUsersList } = userSlice.actions;
 
-export default userSlice.reducer;
+export const { onResetUsersList } = adminSlice.actions;
+
+export default adminSlice.reducer;

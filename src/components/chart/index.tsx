@@ -11,6 +11,14 @@ import {
 } from 'chart.js';
 import { Days, Months, Weeks, Hours } from './data';
 import { ASSETS } from '../../images/path';
+import {
+  API_HANDLER,
+  calculateCurrentWeekData,
+  calculateLast24HoursData,
+  calculateLast30DaysData,
+  calculateMonthlyData,
+} from '../../utils/functions';
+import { END_POINTS } from '../../utils/endpoints';
 
 ChartJS.register(
   CategoryScale,
@@ -24,6 +32,7 @@ ChartJS.register(
 export const BarChart = () => {
   const [durations, setDurations] = useState(Days);
   const [filterActive, setFilterActive] = useState('12 months');
+  const [chartDataObject, setchartDataObject] = useState([]);
 
   useEffect(() => {
     filterActive == '7 Days' && setDurations(Days);
@@ -40,6 +49,17 @@ export const BarChart = () => {
   const [chartOptions, setChartOptions] = useState({});
 
   useEffect(() => {
+    onGetData();
+  }, [filterActive]);
+
+  const onGetData = async () => {
+    const result = await API_HANDLER('GET', END_POINTS.DASHBOARD.CHARTS, {});
+    if (result?.data?.status == 'success') {
+      setchartDataObject(result?.data?.data || []);
+    }
+  };
+
+  useEffect(() => {
     setChartData({
       labels: durations.map((data: any) => data),
       datasets: [
@@ -53,18 +73,29 @@ export const BarChart = () => {
           borderColor: 'rgba(0,0,0,0.2)',
           data:
             filterActive === '1 Year'
-              ? [15, 20, 25, 40, 23, 60, 70, 64, 20, 30, 40, 50]
+              ? calculateMonthlyData(chartDataObject).tokenAmounts
               : filterActive === '7 Days'
-              ? [15, 20, 25, 40, 23, 60, 70]
+              ? calculateCurrentWeekData(chartDataObject).tokenAmounts
               : filterActive === '1 Month'
-              ? [
-                  15, 20, 25, 40, 23, 60, 70, 64, 20, 30, 40, 50, 15, 20, 25,
-                  40, 23, 60, 70, 64, 20, 30, 40, 50, 70, 64, 20, 30, 40, 50,
-                ]
-              : [
-                  15, 20, 25, 40, 23, 60, 70, 64, 20, 30, 40, 50, 15, 20, 25,
-                  40, 23, 60, 70, 64, 20, 30, 40, 50,
-                ],
+              ? calculateLast30DaysData(chartDataObject).tokenAmounts
+              : calculateLast24HoursData(chartDataObject).tokenAmounts,
+        },
+        {
+          borderRadius: 0,
+          barPercentage: 0,
+          barThickness: 20,
+          maxBarThickness: 20,
+          minBarLength: 10,
+          backgroundColor: '#D1E50C',
+          borderColor: 'rgba(0,0,0,0.2)',
+          data:
+            filterActive === '1 Year'
+              ? calculateMonthlyData(chartDataObject)?.remainingAmounts
+              : filterActive === '7 Days'
+              ? calculateCurrentWeekData(chartDataObject)?.remainingAmounts
+              : filterActive === '1 Month'
+              ? calculateLast30DaysData(chartDataObject)?.remainingAmounts
+              : calculateLast24HoursData(chartDataObject)?.remainingAmounts,
         },
       ],
     });
@@ -77,15 +108,29 @@ export const BarChart = () => {
             label: function (context) {
               return ''; // Return an empty string to hide the default label
             },
+            // afterLabel: function (context) {
+            //   const datasetIndex = context.datasetIndex;
+            //   const sales =
+            //     chartData.datasets[datasetIndex].data[context.dataIndex];
+            //   // const profits = getProfitsForIndex(context.dataIndex); // Replace this with your logic to get profits for the index
+
+            //   const salesLabel = `Sales: ${sales}`;
+            //   const profitsLabel = `Profits: 5`; // Replace this with your actual profits value
+
+            //   return salesLabel + '\n' + profitsLabel;
+            // },
             afterLabel: function (context) {
               const datasetIndex = context.datasetIndex;
-              const sales =
-                chartData.datasets[datasetIndex].data[context.dataIndex];
-              // const profits = getProfitsForIndex(context.dataIndex); // Replace this with your logic to get profits for the index
-              
+              const dataIndex = context.dataIndex;
+
+              // Get the corresponding values from tokenAmounts and remainingAmounts arrays
+              const sales = chartData.datasets[datasetIndex].data[dataIndex];
+              const profits =
+                chartData.datasets[datasetIndex === 0 ? 1 : 0].data[dataIndex];
+
               const salesLabel = `Sales: ${sales}`;
-              const profitsLabel = `Profits: 5`; // Replace this with your actual profits value
-        
+              const profitsLabel = `Profits: ${profits}`;
+
               return salesLabel + '\n' + profitsLabel;
             },
           },
@@ -97,8 +142,7 @@ export const BarChart = () => {
           padding: 10, // Add padding to the tooltip content
           cornerRadius: 5, // Optional: Add border radius to the tooltip
         },
-        
-        
+
         grouped: true,
         legend: {
           display: false,
@@ -147,7 +191,7 @@ export const BarChart = () => {
     <div className="space-y-4">
       <div className="flex items-start justify-between">
         <h1 className="text-normal font-semibold text-black-primary md:text-xl lg:text-2xl xl:text-4xl">
-          $28,078.50
+          ${calculateMonthlyData(chartDataObject)?.totalTokenAmount}
         </h1>
 
         <div className="flex h-8 items-center space-x-6  border-b border-gray-normal text-xs font-medium md:text-sm">
@@ -191,7 +235,7 @@ export const BarChart = () => {
           >
             24 hours
           </div>
-          <div
+          {/* <div
             className={`${
               filterActive === 'filter'
                 ? 'mt-2 h-full border-b-2 border-black-primary'
@@ -199,7 +243,7 @@ export const BarChart = () => {
             }`}
           >
             <img src={ASSETS.ICONS.FILTER} alt="" />
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="h-[500px] w-full  pt-5">

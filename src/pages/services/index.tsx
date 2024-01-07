@@ -1,39 +1,26 @@
 import { useState, useEffect } from 'react';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { FaStar } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+
+import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-
-import { fetchUsers } from '../../redux/slices/customers';
-import { calculateAge } from '../../utils/functions';
-import { ASSETS } from '../../images/path';
-import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { fetchAllServices } from '../../redux/slices/services';
 
 export const Services = () => {
   const navigate = useNavigate();
+  const { id } = useParams()
   const dispatch = useDispatch<any>();
-  const { users } = useSelector((state: any) => state.Users);
-
-  const [status, setStatus] = useState(false);
+  const { services } = useSelector((state: any) => state.Services);
 
   useEffect(() => {
-    const payload = {
-      accountType: 'CLIENT',
-    };
-    dispatch(fetchUsers(payload));
+  
+    dispatch(fetchAllServices({
+      id: id
+    }));
   }, []);
-
-  const onChangeStatus = () => {
-    setStatus(!status);
-  };
-
-  const onGetName = (name) => {
-    return name;
-  };
 
   const columns = [
     {
@@ -41,7 +28,7 @@ export const Services = () => {
       selector: 'Services',
       width: '250px', // Specify the width here
       cell: (row: any) => (
-        <div className="font-semibold text-black-primary">Deep Massage</div>
+        <div className="font-semibold text-black-primary">{row?.name}</div>
       ),
       sortable: true,
     },
@@ -49,7 +36,7 @@ export const Services = () => {
       name: 'No. of shops offering this service',
       selector: (row: any) => (
         <div className="font-semibold text-black-primary">
-          {row.no_of_shops || '162 Shops'}
+          {row.no_of_shops || 'N/A'}
         </div>
       ),
     },
@@ -57,7 +44,7 @@ export const Services = () => {
       name: 'Price',
       selector: (row: any) => (
         <div className="font-semibold text-black-primary">
-          {row.price || '€40'}
+          {`€${row.tokenAmount}` || '€0'}
         </div>
       ),
     },
@@ -65,7 +52,7 @@ export const Services = () => {
       name: 'Sales',
       selector: (row: any) => (
         <div className="font-semibold text-black-primary">
-          {row.sales || '€1340'}
+          {row.sales || 'N/A'}
         </div>
       ),
     },
@@ -74,10 +61,13 @@ export const Services = () => {
   return (
     <DefaultLayout>
       <Table
+        goBack={true}
         heading="Services"
         columns={columns}
-        data={users}
+        data={services}
         filterByDays={false}
+        statusFilter={true}
+        rateFilter={false}
       />
     </DefaultLayout>
   );

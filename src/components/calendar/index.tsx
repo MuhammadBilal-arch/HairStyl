@@ -12,7 +12,7 @@ export const useCalendar = () => {
   };
 
   const onHandleSelectedDates = (selectedRanges: any) => {
-    const { startDate, endDate } = selectedRanges.selection;
+    const { startDate, endDate } = selectedRanges.selection; 
     setStartDate(startDate);
     setEndDate(endDate);
   };

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { API_HANDLER_FORM_DATA, showToast } from '../../../utils/functions';
+import { API_HANDLER, API_HANDLER_FORM_DATA, showToast } from '../../../utils/functions';
 import { END_POINTS } from '../../../utils/endpoints';
 import { TOAST_TYPE } from '../../../utils/constants';
 // import { TOAST_TYPE } from "../../../utils/constants";
@@ -26,7 +26,7 @@ export const categorySlice = createSlice({
     builder.addCase(fetchAllCategories.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = null;
-      state.categories = action.payload.data;
+      state.categories = action.payload.data != null ? action.payload.data : [];
     });
     builder.addCase(fetchAllCategories.rejected, (state, action) => {
       state.isLoading = false;
@@ -34,69 +34,29 @@ export const categorySlice = createSlice({
       // showToast(action.payload.message || "Error Occurred.", TOAST_TYPE.error);
     });
 
-    // DELETE ITEM
-    builder.addCase(onDeleteCategory?.pending, (state) => {
+    builder.addCase(onUpdateCategoryStatus.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(onDeleteCategory?.fulfilled, (state, action) => {
+    builder.addCase(onUpdateCategoryStatus.fulfilled, (state, action) => {
       state.isLoading = false;
       state.error = null;
-      console.log(action.payload);
-      const FilteredCategories = state.categories.filter(
-        (item) => item?._id !== action?.payload?.data?._id
-      );
-      state.categories = FilteredCategories;
-    });
-    builder.addCase(onDeleteCategory?.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload || null;
-      // showToast(action.payload.message || "Error Occurred.", TOAST_TYPE.error);
-    });
-
-    // ADD ITEM
-    builder.addCase(onAddCategory?.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
-    });
-    builder.addCase(onAddCategory?.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-      console.log(action.payload);
-      state.categories.push(action?.payload?.data);
-    });
-    builder.addCase(onAddCategory?.rejected, (state, action) => {
-      state.isLoading = false;
-      state.error = action.payload || null;
-      // showToast(action.payload.message || "Error Occurred.", TOAST_TYPE.error);
-    });
-    // UPDATE
-    builder.addCase(onUpdateCategory?.pending, (state) => {
-      state.isLoading = true;
-      state.error = null;
-    });
-    builder.addCase(onUpdateCategory?.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.error = null;
-      const userIndex = state.categories.findIndex(
-        (item) => item?._id === action?.payload?.data._id
-      );
+      const userIndex = state.categories.findIndex((item) => item?.id === action?.payload?._id);
       if (userIndex !== -1) {
-        state.categories[userIndex] = action.payload.data;
+        state.categories[userIndex].status = action.payload.status;
       }
-      showToast(action.payload.message || 'Error Occurred.', TOAST_TYPE.info);
     });
-    builder.addCase(onUpdateCategory?.rejected, (state, action) => {
+    builder.addCase(onUpdateCategoryStatus.rejected, (state, action) => {
       state.isLoading = false;
-      state.error = action.payload || null;
+      state.error = action?.payload;
       // showToast(action.payload.message || "Error Occurred.", TOAST_TYPE.error);
     });
-  },
+  }
 });
 
 export const fetchAllCategories = createAsyncThunk(
   'categories/fetchAllCategories',
-  async (payload, { rejectWithValue }) => {
+  async (payload:any, { rejectWithValue }) => {
     try {
       console.log(payload);
       const result = await API_HANDLER_FORM_DATA(
@@ -112,57 +72,23 @@ export const fetchAllCategories = createAsyncThunk(
   }
 );
 
-export const onDeleteCategory = createAsyncThunk(
-  'categories/onDeleteCategory',
-  async (payload, { rejectWithValue }) => {
+export const onUpdateCategoryStatus = createAsyncThunk(
+  'users/onUpdateUserStatus',
+  async (payload:any, { rejectWithValue }) => {
     try {
-      console.log(payload);
-      const result = await API_HANDLER_FORM_DATA(
-        'DELETE',
-        END_POINTS.CATEGORIES.DELETE,
-        payload
+      const result = await API_HANDLER(
+        'GET',
+        `${END_POINTS.CATEGORIES.UPDATE}/${payload?._id}`,
+        {}
       );
-      const data = await result?.data;
-      return data;
+      // const data = await result.data;
+      return payload;
     } catch (error:any) {
-      return rejectWithValue(error?.response?.data?.message);
+      return rejectWithValue(error.response.data);
     }
   }
 );
 
-export const onAddCategory = createAsyncThunk(
-  'categories/onAddCategory',
-  async (payload, { rejectWithValue }) => {
-    try {
-      const result = await API_HANDLER_FORM_DATA(
-        'POST',
-        END_POINTS.CATEGORIES.ADD,
-        payload
-      );
-      const data = await result.data;
-      return data;
-    } catch (error:any) {
-      return rejectWithValue(error.response.data.message);
-    }
-  }
-);
-
-export const onUpdateCategory = createAsyncThunk(
-  'categories/onUpdateCategory',
-  async (payload, { rejectWithValue }) => {
-    try {
-      const result = await API_HANDLER_FORM_DATA(
-        'PATCH',
-        END_POINTS.CATEGORIES.UPDATE,
-        payload
-      );
-      const data = await result.data;
-      return data;
-    } catch (error:any) {
-      return rejectWithValue(error.response.data.message);
-    }
-  }
-);
 export const { onResetCategoryState } = categorySlice.actions;
 
 export default categorySlice.reducer;

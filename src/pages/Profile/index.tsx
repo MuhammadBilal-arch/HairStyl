@@ -10,51 +10,81 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { ASSETS } from '../../images/path';
 import { InputWithLabel } from '../../components/inputWithLabel';
-import { AiOutlineCloudUpload } from 'react-icons/ai';
 import { MdAdminPanelSettings, MdOutlineModeEditOutline } from 'react-icons/md';
 import { FiArrowUpRight } from 'react-icons/fi';
+import { onUpdateUser } from '../../redux/slices/user/user';
 
 export const Profile = () => {
   const dispatch = useDispatch<any>();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = useSelector((state: any) => state?.User);
+  const { user } = useSelector((state: any) => state?.User); 
+  const [image , setImage] = useState('');
+  const [uploadedImg, setUploadedImg] = useState<any>();
 
   const validationSchema = Yup.object({
-    // tax: Yup.string().required('Field is required'),
-    // delivery_charges: Yup.string().required('Field is required'),
+    name: Yup.string().required('Field is required'),
+    email: Yup.string().required('Field is required'),
+    phoneNumber: Yup.string().required('Field is required'),
+    city: Yup.string().required('Field is required'),
+    bankName: Yup.string().required('Field is required'),
+    accountName: Yup.string().required('Field is required'),
+    accountNumber: Yup.string().required('Field is required'),
+    code: Yup.string().required('Field is required'),
+    // branchCity: Yup.string().required('Field is required'),
+    twitter: Yup.string().required('Field is required'),
+    facebook: Yup.string().required('Field is required'),
+    gmail: Yup.string().required('Field is required'),
+    youtube: Yup.string().required('Field is required'),
+    // image: Yup.string().required('Field is required'),
   });
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      personal_name: '', 
-      email: '',
-      city: '',
-      contact: '',
-      bank_name: '',
-      account_name: '',
-      account_number: '',
-      branch_code: '',
-      twitter: '',
-      facebook: '',
-      gmail: '',
-      youtube: '',
+
+      name: user.name || '' ,
+      email: user.email || '',
+      city: user.city || '',
+      phoneNumber: user.phoneNumber || '',
+      bankName: user?.bankDetails?.bankName || '',
+      accountName: user?.bankDetails?.accountName || '',
+      accountNumber: user?.bankDetails?.accountNumber || '',
+      code: user?.bankDetails?.code || '',
+      branchCity: user?.bankDetails?.branchCity || user.city,
+      twitter: user?.social?.twitter || '',
+      facebook: user?.social?.facebook || '',
+      gmail: user?.social?.gmail || '',
+      youtube: user?.social?.youtube ||  '',
     },
     validationSchema,
     onSubmit: async (values) => {
-      console.log(values)
-      // const formData = new FormData();
-      // formData.append('tax', values.tax);
-      // formData.append('delivery_charges', values.delivery_charges);
-      // formData.append('id', defaultValue?._id);
-      // dispatch(updateTaxes(formData));
-      // onUpdateProfileModal();
+
+      const formData = new FormData();
+      formData.append('id', user.id);
+      formData.append('name', values.name);
+      formData.append('email', values.email);
+      formData.append('phoneNumber', values.phoneNumber);
+      formData.append('city', values.city);
+      formData.append('bankName', values.bankName);
+      formData.append('accountName', values.accountName);
+      formData.append('accountNumber', values.accountNumber);
+      formData.append('code', values.code);
+      formData.append('branchCity', values.city);
+      formData.append('facebook', values.facebook);
+      formData.append('twitter', values.twitter);
+      formData.append('gmail', values.gmail);
+      formData.append('youtube', values.youtube);
+      if(image){
+        formData.append('image', image);
+        setUploadedImg('')
+      }
+      else {
+        formData.append('image', user.image);
+      }
+
+      dispatch(onUpdateUser(formData));
     },
   });
-
-  const [uploadedImg, setUploadedImg] = useState<any>(
-    `${BASE_URL}/${user?.dispensary?.image}`
-  );
 
 
   const onUploadImage = (e: any) => {
@@ -62,13 +92,8 @@ export const Profile = () => {
     var file = e.target.files[0];
 
     setUploadedImg(URL.createObjectURL(file));
-    // const formData = new FormData();
-    // formData.append('id', user?.dispensary?._id);
-    // formData.append('image', file);
-    // dispatch(onUpdateUserDispensaryInfo(formData));
+    setImage(file)
   };
-
- 
 
   return (
     <DefaultLayout>
@@ -82,35 +107,49 @@ export const Profile = () => {
           <div className="flex items-center">
             <div className="relative h-34 w-34">
               <img
-                src={ASSETS.PROFILE.PROFILE_AVATAR}
+                src={uploadedImg || user.image || ASSETS.AUTH.SIGN_IN_COVER}
                 alt=""
-                className="h-34 w-34 object-cover"
+                className="h-32 w-32 object-cover rounded-full"
               />
-              <div className="absolute bottom-5 right-5 z-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-yellow-primary">
+              <label 
+              htmlFor="image"               
+              className="absolute cursor-pointer bottom-5 right-5 z-1 flex h-6 w-6 items-center justify-center rounded-full border-2 border-white bg-yellow-primary">
                 <MdOutlineModeEditOutline />
-              </div>
+              </label>
+              <input
+              type="file"
+              className="hidden"
+              accept="image/*"
+              name="image"
+              id="image"
+              onChange={onUploadImage}
+              />
             </div>
             <div>
               <h1 className="text-sm font-semibold text-black-primary md:text-base">
-                Olivia Rhye
+                {user.name}
               </h1>
-              <div className="text-xs md:text-sm">olivia@intitledui.com</div>
+              <div className="text-xs md:text-sm">{user.email}</div>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <button
-            onClick={()=> navigate('/manage-accounts')}
-            className="flex items-center space-x-1 bg-black-primary px-2 py-1.5 text-sm text-white">
+              onClick={() => navigate('/manage-accounts')}
+              className="flex items-center space-x-1 bg-black-primary px-2 py-1.5 text-sm text-white"
+            >
               <div>
                 <MdAdminPanelSettings className="text-lg" />{' '}
               </div>
               <div>Manage Account </div>
             </button>
-            <button 
-                        onClick={()=> navigate('/reset-password-email')}
-            className="flex items-center space-x-1 bg-black-primary px-2 py-1.5 text-sm text-white">
+            <button
+              onClick={() => navigate('/reset-password-email')}
+              className="flex items-center space-x-1 bg-black-primary px-2 py-1.5 text-sm text-white"
+            >
               <div>Reset Password </div>
-              <div><FiArrowUpRight className="text-lg"/></div>
+              <div>
+                <FiArrowUpRight className="text-lg" />
+              </div>
             </button>
           </div>
         </div>
@@ -131,12 +170,12 @@ export const Profile = () => {
               label="Personal Name"
               placeholder="Enter Personal Name"
               type="text"
-              name="personal_name"
-              value={formik?.values?.personal_name}
+              name="name"
+              value={formik?.values?.name}
               onChange={formik?.handleChange}
               onBlur={formik?.handleBlur}
-              errors={formik?.errors?.personal_name}
-              touched={formik?.touched?.personal_name}
+              errors={formik?.errors?.name}
+              touched={formik?.touched?.name}
               style={true}
             />
             <InputWithLabel
@@ -155,12 +194,12 @@ export const Profile = () => {
               label="Contact"
               placeholder="Enter Contact"
               type="text"
-              name="contact"
-              value={formik?.values?.contact}
+              name="phoneNumber"
+              value={formik?.values?.phoneNumber}
               onChange={formik?.handleChange}
               onBlur={formik?.handleBlur}
-              errors={formik?.errors?.contact}
-              touched={formik?.touched?.contact}
+              errors={formik?.errors?.phoneNumber}
+              touched={formik?.touched?.phoneNumber}
               style={true}
             />
             <InputWithLabel
@@ -187,48 +226,48 @@ export const Profile = () => {
               label="Bank Name"
               placeholder="Enter Bank Name"
               type="text"
-              name="bank_name"
-              value={formik?.values?.bank_name}
+              name="bankName"
+              value={formik?.values?.bankName}
               onChange={formik?.handleChange}
               onBlur={formik?.handleBlur}
-              errors={formik?.errors?.bank_name}
-              touched={formik?.touched?.bank_name}
+              errors={formik?.errors?.bankName}
+              touched={formik?.touched?.bankName}
               style={true}
             />
             <InputWithLabel
               label="Account Name"
               placeholder="Enter Account Name"
               type="text"
-              name="account_name"
-              value={formik?.values?.account_name}
+              name="accountName"
+              value={formik?.values?.accountName}
               onChange={formik?.handleChange}
               onBlur={formik?.handleBlur}
-              errors={formik?.errors?.account_name}
-              touched={formik?.touched?.account_name}
+              errors={formik?.errors?.accountName}
+              touched={formik?.touched?.accountName}
               style={true}
             />
             <InputWithLabel
               label="Account Number"
               placeholder="Enter Account Number"
               type="number"
-              name="account_number"
-              value={formik?.values?.account_number}
+              name="accountNumber"
+              value={formik?.values?.accountNumber}
               onChange={formik?.handleChange}
               onBlur={formik?.handleBlur}
-              errors={formik?.errors?.account_number}
-              touched={formik?.touched?.account_number}
+              errors={formik?.errors?.accountNumber}
+              touched={formik?.touched?.accountNumber}
               style={true}
             />
             <InputWithLabel
               label="Branch Code"
               placeholder="Enter Branch Code"
               type="number"
-              name="branch_code"
-              value={formik?.values?.branch_code}
+              name="code"
+              value={formik?.values?.code}
               onChange={formik?.handleChange}
               onBlur={formik?.handleBlur}
-              errors={formik?.errors?.branch_code}
-              touched={formik?.touched?.branch_code}
+              errors={formik?.errors?.code}
+              touched={formik?.touched?.code}
               style={true}
             />
           </div>
@@ -253,7 +292,7 @@ export const Profile = () => {
             <InputWithLabel
               label="Gmail"
               placeholder="Enter Gmail"
-              type="email"
+              type="text"
               name="gmail"
               value={formik?.values?.gmail}
               onChange={formik?.handleChange}
@@ -288,7 +327,7 @@ export const Profile = () => {
             />
           </div>
 
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <h1 className="text-black w-full text-sm font-bold md:text-base">
               Store Front Image
             </h1>
@@ -392,11 +431,16 @@ export const Profile = () => {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="flex w-full items-center justify-end ">
-            <div className='space-x-2 flex items-center text-sm '>
-              <button className='px-2 py-1.5'>Cancel</button>
-              <button type='submit' className='bg-black-primary px-2 py-1.5 text-center text-white'>Save Changes</button>
+            <div className="flex items-center space-x-2 text-sm ">
+              <button className="px-2 py-1.5">Cancel</button>
+              <button
+                type="submit"
+                className="bg-black-primary px-2 py-1.5 text-center text-white"
+              >
+                Save Changes
+              </button>
             </div>
           </div>
         </form>

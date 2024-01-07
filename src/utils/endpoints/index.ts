@@ -1,67 +1,44 @@
 export const END_POINTS = {
   AUTH: {
-    LOGIN: '/account/login',
-    REGISTER: '/account/register',
-    FORGOT_PASSWORD: '/account/forgot-password',
-    RESET_PASSWORD: '/account/reset-password',
-    SEND_OTP: '/account/send-otp',
-    VERIFY_OTP: '/account/verify-otp',
-    UPLOAD: '/account/upload/license',
-    UPDATE: '/account/update',
-    GOOGLE_AUTH: '/account/google/userinfo',
+    LOGIN: 'login',
+    FORGOT: 'forgot',
+    LOGOUT: 'logout',
   },
-  DISPENSARIES: {
-    ADD: '/dispensary/add',
-    GET_ALL: '/dispensary/',
-    GET_NEAREST: '/dispensary/nearest',
-    DELETE: '/dispensary/delete',
-    UPDATE: '/dispensary/update',
+  DASHBOARD: {
+    ADD: 'dashboard',
+    GET: 'dashboard',
+    CHARTS: 'getEarnings'
+  },
+
+  ADMINS: {
+    GET_ALL: 'getAdmins',
+    ADD: 'createNewUser',
+    DELETE: 'delUser',
+    UPDATE: 'updateUser',
+  },
+  USERS: {
+    GET_ALL: 'users',
+  },
+  VENDORS: {
+    GET_ALL: 'vendors',
+    TOP_RATED: 'topRated',
+    TOP_SELLING: 'topSellings',
+  },
+  SERVICES: {
+    GET_ALL: 'getServicesAdmin',
   },
   CATEGORIES: {
-    ADD: '/category/add',
-    GET_ALL: '/category',
-    DELETE: '/category/delete',
-    UPDATE: '/category/update',
+    ADD: 'createCategory',
+    GET_ALL: 'getCategories',
+    DELETE: 'deleteCategory',
+    UPDATE: 'updateCategory',
   },
   PRODUCTS: {
-    ADD: '/product/add',
-    GET_BY_ID: '/product/getbyid',
-    DELETE: '/product/delete',
-    UPDATE: '/product/update',
+    GET_ALL: 'getProducts',
+    DELETE: 'deleteCategory',
   },
-  CHAT: {
-    ADD: '/chat/create',
-    GET: '/chat/id',
-    DELETE: '/chat/delete',
-    UPDATE: '/chat/update',
-  },
-  LOCATION: {
-    ADD: '/location/create',
-    GET: '/location/',
-    DELETE: '/location/delete',
-    UPDATE: '/location/update',
-    UPDATE_STATUS: '/location/status',
-  },
-  ORDER: {
-    GET_ID: '/order/getbyid',
-    ADD: '/order/create',
-    GET: '/order/',
-    DELETE: '/order/delete',
-    UPDATE: '/order/update',
-  },
-  TRANSACTIONS: {
-    GET: '/transaction/revenue',
-    GET_ALL: '/transaction/',
-  },
+
   ACCOUNTS: {
-    GET: '/account/users',
-    UPDATE: '/account/update',
-  },
-  TAX: {
-    GET: '/tax/',
-    UPDATE: '/tax/update',
-  },
-  NOTIFICATIONS: {
-    GET: '/notification/',
+    UPDATE: 'status',
   },
 };

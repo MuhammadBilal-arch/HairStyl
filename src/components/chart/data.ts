@@ -1,12 +1,12 @@
 
 export const Days = [
+    'Sunday',
     'Monday',
     'Tuesday',
     'Wednesday',
     'Thursday',
     'Friday',
     'Saturday',
-    'Sunday',
 ]
 export const Months = [
     'Jan',

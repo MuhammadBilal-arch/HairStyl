@@ -12,29 +12,22 @@ import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { fetchStaff } from '../../redux/slices/vendors';
 
 export const Staff = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
-  const { users } = useSelector((state: any) => state.Users);
-
+  const { staff } = useSelector((state: any) => state.Vendors);
+  console.log(staff)
   const [status, setStatus] = useState(false);
 
   useEffect(() => {
-    const payload = {
-      accountType: 'CLIENT',
-    };
-    dispatch(fetchUsers(payload));
+    dispatch(fetchStaff({}));
   }, []);
 
   const onChangeStatus = () => {
     setStatus(!status);
   };
-
-  const onGetName = (name) => {
-    return name;
-  };
-
 
   const columns = [
     {
@@ -44,11 +37,11 @@ export const Staff = () => {
       cell: (row: any) => (
         <div className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary">
           <img
-            src={ASSETS.AUTH.SIGN_IN_COVER}
+            src={row?.profilePicture || ASSETS.AUTH.SIGN_IN_COVER}
             alt=""
             className="h-7 w-7 rounded-full object-cover"
           />
-          <div className=""> {onGetName(row?.fname + ' ' + row?.lname)}</div>
+          <div className=""> {row.name}</div>
         </div>
       ),
       sortable: true,
@@ -57,20 +50,20 @@ export const Staff = () => {
       name: 'Shop',
       selector: (row: any) => (
         <div className="font-semibold text-black-primary">
-          {row.shop || 'Lahore'}{' '}
+          {row?.shopName || 'N/A'}{' '}
         </div>
       ),
     },
     {
       name: 'Contact',
       selector: (row: any) => (
-        <span className="font-semibold text-black-primary">{row?.phone}</span>
+        <span className="font-semibold text-black-primary">{row?.phoneNumber || 'N/A'}</span>
       ),
     },
     {
       name: 'Sales',
       selector: (row: any) => (
-        <span className="font-semibold text-black-primary">{row?.sales || "€560"}</span>
+        <span className="font-semibold text-black-primary">{row?.sales || "N/A"}</span>
       ),
     },
 
@@ -90,10 +83,12 @@ export const Staff = () => {
   return (
     <DefaultLayout>
       <Table
+        goBack={false}
         heading="Staff"
         columns={columns}
-        data={users}
+        data={staff}
         filterByDays={false}
+        statusFilter={true}
       />
     </DefaultLayout>
   );

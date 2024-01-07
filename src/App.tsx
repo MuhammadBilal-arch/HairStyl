@@ -31,6 +31,11 @@ import { ProductDetail } from './pages/products/detail';
 import { Profile } from './pages/Profile';
 import { ManageAccounts } from './pages/Profile/manageAccounts';
 import { SalesDetail } from './pages/sales/sales';
+import { Categories } from './pages/categories';
+import { TermsConditions } from './pages/termsConditions';
+import { ServiceCategories } from './pages/services/categories';
+import { HomeDetail } from './pages/home/detail';
+import { TopRated } from './pages/sales/topRated';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -61,18 +66,23 @@ function App() {
                 <Route path="/reset-password-email" element={<ResetPasswordEmail />} />
                 <Route path="/reset-password-otp" element={<ResetPasswordOtp />} />
 
+                <Route path="/home-detail" element={<HomeDetail />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/clients" element={<Clients />} />
                 <Route path="/customers" element={<Customer />} />
                 <Route path="/staff" element={<Staff />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/chart" element={<Chart />} /> 
-                <Route path="/services" element={<Services />} /> 
-                <Route path="/sales" element={<Sales />} /> 
-                <Route path="/sales-detail" element={<SalesDetail />} /> 
+                <Route path="/services-list" element={<ServiceCategories />} /> 
+                <Route path="/services/:id" element={<Services />} /> 
+                <Route path="/sales-details" element={<Sales />} /> 
+                <Route path="/sales" element={<SalesDetail />} /> 
+                <Route path="/sales-top-rated" element={<TopRated />} /> 
                 <Route path="/ecommerce" element={<ECommerce />} /> 
                 <Route path="/account" element={<Profile />} /> 
                 <Route path="/manage-accounts" element={<ManageAccounts />} /> 
+                <Route path="/categories" element={<Categories />} /> 
+                <Route path="/terms-conditions" element={<TermsConditions />} /> 
                 
 
 

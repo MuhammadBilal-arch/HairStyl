@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
-import { fetchUsers } from '../../redux/slices/customers';
+import { fetchVendors, onUpdateVendorStatus } from '../../redux/slices/vendors';
 import { calculateAge } from '../../utils/functions';
 import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
@@ -16,29 +16,27 @@ import DefaultLayout from '../../layout/DefaultLayout';
 export const Clients = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
-  const { users } = useSelector((state: any) => state.Users);
-
-  const [status, setStatus] = useState(false);
+  const { vendors } = useSelector((state: any) => state.Vendors);
 
   useEffect(() => {
-    const payload = {
-      accountType: 'CLIENT',
-    };
-    dispatch(fetchUsers(payload));
+    dispatch(fetchVendors({}));
   }, []);
 
-  const onChangeStatus = () => {
-    setStatus(!status);
+  const onChangeStatus = (user:any) => {
+    // setStatus(!status); 
+    
+    dispatch(onUpdateVendorStatus({
+      _id:user.id,
+      status: user.status == 0 ? 1 : 0
+    }));
   };
 
-  const onGetName = (name) => {
-    return name;
-  };
+
 
   const columns = [
     {
       name: 'Clients',
-      selector: 'clients',
+      selector: 'name',
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
@@ -50,11 +48,11 @@ export const Clients = () => {
           }
         >
           <img
-            src={ASSETS.AUTH.SIGN_IN_COVER}
+            src={row?.image || ASSETS.DUMMY_IMAGE}
             alt=""
-            className="h-7 w-7 rounded-full object-cover"
+            className="h-7 w-7 rounded-full object-contain"
           />
-          <div className=""> {onGetName(row?.fname + ' ' + row?.lname)}</div>
+          <div className=""> {row.name}</div>
         </div>
       ),
       sortable: true,
@@ -72,20 +70,20 @@ export const Clients = () => {
       selector: (row: any) => (
         <span className="flex space-x-1 font-medium text-black-primary">
           <FaStar className="text-yellow-primary" />{' '}
-          <span>{row?.ratings || '5.0'}</span>
+          <span>{row?.rating || 'NA'}</span>
         </span>
       ),
     },
     {
       name: 'Contact',
       selector: (row: any) => (
-        <span className="font-medium text-black-primary">{row?.phone}</span>
+        <span className="font-medium text-black-primary">{row?.phoneNumber}</span>
       ),
     },
     {
       name: 'Status',
       selector: (row: any) =>
-        row?.status ? (
+        row?.status != 0 ? (
           <div className="rounded-2xl bg-blue-light px-4  py-0.5 font-semibold text-blue-primary">
             <span className="mr-1 text-xl text-green-base">•</span> Active
           </div>
@@ -99,10 +97,10 @@ export const Clients = () => {
       name: 'Hide / Unhide',
       selector: (row: any) => (
         <ToggleButton
-          onChangeStatus={onChangeStatus}
-          status={status}
+          onChangeStatus={() => onChangeStatus(row)}
+          status={row.status == 0 ? false : true}
           text=""
-          id={row._id}
+          id={row.id}
         />
       ),
     },
@@ -114,8 +112,13 @@ export const Clients = () => {
         goBack={true}
         heading="Clients"
         columns={columns}
-        data={users}
+        data={vendors}
         filterByDays={true}
+        showBottomTab={false}
+        showPagination={true}
+        onViewAllContent={()=> {}}
+        statusFilter={true}
+        rateFilter={false}
       />
     </DefaultLayout>
   );

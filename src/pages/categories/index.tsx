@@ -19,15 +19,15 @@ import { END_POINTS } from '../../utils/endpoints';
 import { fetchAdmins, onUpdateAdminStatus } from '../../redux/slices/admins';
 import { useDispatch } from 'react-redux';
 import { TOAST_TYPE } from '../../utils/constants';
+import { fetchAllCategories, onUpdateCategoryStatus } from '../../redux/slices/category';
 
-export const ManageAccounts = () => {
+export const Categories = () => {
   const dispatch = useDispatch<any>();
-  const { admins } = useSelector((state: any) => state.Admins);
-  const [status, setStatus] = useState(false);
+  const { categories } = useSelector((state: any) => state.Category);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchAdmins({}));
+    dispatch(fetchAllCategories({}));
   }, []);
 
   const customStyles = {
@@ -51,60 +51,49 @@ export const ManageAccounts = () => {
     },
   };
 
-  const onChangeStatus = (user: any) => {
+  const onChangeStatus = (category: any) => {
     dispatch(
-      onUpdateAdminStatus({
-        _id: user.id,
-        status: user.status == 0 ? 1 : 0,
+      onUpdateCategoryStatus({
+        _id: category.id,
+        status: category.status == 0 ? 1 : 0,
       })
     );
   };
 
   const columns = [
     {
-      name: 'Account name',
-      selector: 'Account name',
+      name: 'Categories Added',
+      selector: 'Categories Added',
       width: '200px', // Specify the width here
       cell: (row: any) => (
         <div className="flex w-full cursor-pointer items-center space-x-2 font-semibold">
-          <img
-            src={ASSETS.AUTH.SIGN_IN_COVER}
-            alt=""
-            className="h-7 w-7 rounded-full object-cover"
-          />
           <div className=""> {row?.name || 'Ray'}</div>
         </div>
       ),
       sortable: true,
     },
     {
-      name: 'Email',
+      name: 'Profit on category',
       selector: (row: any) => (
         <div className="font-semibold text-black-primary">
-          {row?.email || 'adil@gmail.com'}
+          <select
+            className="focus-none w-32 border border-[#DFDFDF] py-1 px-2 text-center outline-none"
+            defaultValue={row?.percentage}
+          >
+            {[
+              5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85,
+              90, 95, 100,
+            ].map((item, index) => (
+              <option key={index} value={item}>
+                {item} %
+              </option>
+            ))}
+          </select>
         </div>
       ),
     },
     {
-      name: 'Username',
-      selector: (row: any) => (
-        <div className="font-semibold text-black-primary">
-          {row.name || 'Adil'}
-        </div>
-      ),
-    },
-    {
-      name: 'Password',
-      selector: (row: any) => (
-        <div className="font-semibold text-black-primary">
-          {row?.password?.length > 10
-            ? row?.password?.substring(0, 10).concat('...')
-            : '1231231'}
-        </div>
-      ),
-    },
-    {
-      name: 'Access ON / OFF',
+      name: 'Hide / Unhide',
       selector: (row: any) => (
         <div className="flex items-center space-x-4">
           <ToggleButton
@@ -113,52 +102,56 @@ export const ManageAccounts = () => {
             text=""
             id={row.id}
           />
-          <div className="cursor-pointer">
-            <RiDeleteBin6Line onClick={() => onDeleteAdmin(row)} />
-          </div>
+        </div>
+      ),
+    },
+    {
+      name: 'Delete',
+      selector: (row: any) => (
+        <div className="cursor-pointer">
+          <RiDeleteBin6Line onClick={() => onDeleteCategory(row)} />
         </div>
       ),
     },
   ] as any;
 
   const validationSchema = Yup.object({
-    personal_name: Yup.string().required('Field is required'),
-    email: Yup.string().required('Field is required'),
-    account_name: Yup.string().required('Field is required'),
-    password: Yup.string().required('Field is required'),
+    category_name: Yup.string().required('Field is required'),
   });
+
   const formik = useFormik({
     enableReinitialize: true,
     initialValues: {
-      personal_name: '',
-      email: '',
-      account_name: '',
-      password: '',
+      category_name: '',
+      percent: '',
     },
     validationSchema,
-    onSubmit: async (values) => { 
+    onSubmit: async (values) => {
       const payload = {
-        name: values.personal_name,
-        email: values.email,
-        password: values.password,
-        account_name: values.account_name,
+        name: values.category_name,
+        percentage: values.percent || 0,
       };
-      const result = await API_HANDLER('POST', END_POINTS.ADMINS.ADD, payload);
+      const result = await API_HANDLER(
+        'POST',
+        END_POINTS.CATEGORIES.ADD,
+        payload
+      );
       if (result?.data?.status == 'success') {
         dispatch(fetchAdmins({}));
         showToast(result.data.message, TOAST_TYPE.success);
+        dispatch(fetchAllCategories({}));
       }
     },
   });
 
-  const onDeleteAdmin = async (user: any) => {
+  const onDeleteCategory = async (category: any) => {
     const result = await API_HANDLER(
       'GET',
-      END_POINTS.ADMINS.DELETE + '/' + user.id,
+      END_POINTS.CATEGORIES.DELETE + '/' + category.id,
       {}
     );
     if (result?.data?.status == 'success') {
-      dispatch(fetchAdmins({}));
+      dispatch(fetchAllCategories({}));
       showToast(result.data.message, TOAST_TYPE.success);
     }
   };
@@ -172,82 +165,74 @@ export const ManageAccounts = () => {
             className="text-normal flex items-center space-x-2 font-semibold text-black-primary md:text-xl"
           >
             <FaArrowLeft className="text-lg font-normal" />
-            <span>Manage Accounts</span>
+            <span>Categories</span>
           </h1>
         </div>
+        <h1
+            className="text-normal mt-5 flex items-center space-x-2 font-semibold text-black-primary md:text-base"
+          >
+            <span>All Categories</span>
+          </h1>
 
         <DataTable
           className="font-semibold text-black-primary"
           columns={columns}
-          data={admins}
+          data={categories}
           fixedHeader
           customStyles={customStyles}
         />
 
         <form onSubmit={formik.handleSubmit} className="space-y-10">
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="flex w-full items-center justify-between md:col-span-2">
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="flex w-full items-center justify-between md:col-span-3">
               <h1 className="text-black w-full text-sm font-bold text-black-base md:text-base">
-                + Add Account
+                + Add New Category
               </h1>
             </div>
             <InputWithLabel
-              label="Account Name"
-              placeholder="Enter Account Name"
+              label="Category Name"
+              placeholder="Enter Category Name"
               type="text"
-              name="account_name"
-              value={formik?.values?.account_name}
+              name="category_name"
+              value={formik?.values?.category_name}
               onChange={formik?.handleChange}
               onBlur={formik?.handleBlur}
-              errors={formik?.errors?.account_name}
-              touched={formik?.touched?.account_name}
+              errors={formik?.errors?.category_name}
+              touched={formik?.touched?.category_name}
               style={true}
             />
-            <InputWithLabel
-              label="Email"
-              placeholder="Type email"
-              type="email"
-              name="email"
-              value={formik?.values?.email}
-              onChange={formik?.handleChange}
-              onBlur={formik?.handleBlur}
-              errors={formik?.errors?.email}
-              touched={formik?.touched?.email}
-              style={true}
-            />
-            <InputWithLabel
-              label="Username"
-              placeholder="Type user name"
-              type="text"
-              name="personal_name"
-              value={formik?.values?.personal_name}
-              onChange={formik?.handleChange}
-              onBlur={formik?.handleBlur}
-              errors={formik?.errors?.personal_name}
-              touched={formik?.touched?.personal_name}
-              style={true}
-            />
-            <InputWithLabel
-              label="Password"
-              placeholder="Type password"
-              type="password"
-              name="password"
-              value={formik?.values?.password}
-              onChange={formik?.handleChange}
-              onBlur={formik?.handleBlur}
-              errors={formik?.errors?.password}
-              touched={formik?.touched?.password}
-              style={true}
-            />
-          </div>
-          <div className="flex w-full items-center justify-end ">
-            <div className="flex items-center space-x-2 text-sm ">
-              <button className="px-2 py-1.5">Cancel</button>
+            <div className="flex flex-col space-y-2 w-full">
+              <label
+                htmlFor="percent"
+                className={`text-sm font-semibold ${'text-black-primary'}`}
+              >
+                Profit on Category
+              </label>
+              <select
+                id="percent"
+                name="percent"
+                value={formik?.values?.percent}
+                onChange={formik?.handleChange}
+                onBlur={formik?.handleBlur}
+                className="focus-none min-w-32 border border-[#DFDFDF] py-2 px-5 text-center outline-none"
+              >
+                {[
+                  5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80,
+                  85, 90, 95, 100,
+                ].map((item, index) => (
+                  <option key={index} value={item}>
+                    {item} %
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className='w-full space-y-1'>
+              <div className='text-transparent'>asd</div>
               <button
                 type="submit"
-                className="bg-black-primary px-2 py-1.5 text-center text-white"
+                className="h-9 w-full bg-black-primary px-4 py-1.5 text-center text-white"
               >
-                Save Changes
+                Save
               </button>
             </div>
           </div>

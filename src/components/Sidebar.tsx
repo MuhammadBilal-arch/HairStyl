@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useContext } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 // import Logo from '../images/logo/logo.svg';
 // import SidebarLinkGroup from './SidebarLinkGroup';
 import { ASSETS } from '../images/path';
@@ -9,7 +9,13 @@ import { HiSquares2X2 } from 'react-icons/hi2';
 import { BsBox } from 'react-icons/bs';
 import { BiBarChartSquare } from 'react-icons/bi';
 import { FaUserAlt } from 'react-icons/fa';
-import { MdAdminPanelSettings, MdOutlineLogout } from 'react-icons/md';
+import { MdAdminPanelSettings, MdCategory, MdOutlineLogout } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { onResetUserState } from '../redux/slices/user/user';
+import { API_HANDLER, showToast } from '../utils/functions';
+import { END_POINTS } from '../utils/endpoints';
+import { TOAST_TYPE } from '../utils/constants';
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -19,6 +25,10 @@ interface SidebarProps {
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { user } = useSelector((state:any) => state.User);
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -62,6 +72,22 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       document.querySelector('body')?.classList.remove('sidebar-expanded');
     }
   }, [sidebarExpanded]);
+
+  const onLogout = async() => {
+
+    const result = await API_HANDLER(
+      'GET',
+      END_POINTS.AUTH.LOGOUT,
+      {}
+    );
+    if (result?.data?.status == 'success') {
+      showToast(result.data.message, TOAST_TYPE.success);
+      localStorage.clear();
+      dispatch(onResetUserState());  
+      navigate('/');
+    }
+
+  }
 
   return (
     <aside
@@ -132,7 +158,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </li>
                 <li>
                   <NavLink
-                    to="/services"
+                    to="/services-list"
                     className={`sidebar-item-inactive ${
                       pathname.includes('services') && 'sidebar-item-active'
                     }`}
@@ -181,6 +207,26 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <FaUserAlt className="text-sm" /> <span>Staff</span>
                   </NavLink>
                 </li>
+                <li>
+                  <NavLink
+                    to="/categories"
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('categories') && 'sidebar-item-active'
+                    }`}
+                  >
+                    <MdCategory className="text-sm" /> <span>Categories</span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="/terms-conditions"
+                    className={`sidebar-item-inactive ${
+                      pathname.includes('terms') && 'sidebar-item-active'
+                    }`}
+                  >
+                    <MdCategory className="text-sm" /> <span>Terms & Conditions</span>
+                  </NavLink>
+                </li>
               </ul>
 
               <div className="border-t border-white pt-2">
@@ -198,16 +244,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <div className="grid grid-cols-6 items-center space-x-4 w-full  border-t border-white px-4 py-2 text-white">
               <div className="h-8 w-8 object-contain">
                 <img
-                  src={ASSETS.AUTH.SIGN_IN_COVER}
+                  src={user?.image !== null ? user?.image :ASSETS.AUTH.SIGN_IN_COVER }
                   alt=""
                   className="w-full h-full rounded-full object-cover"
                 />{' '}
               </div>
               <div className="flex col-span-4 flex-col ">
-                <div className="text-sm">Olivia Rhye</div>
-                <div className="text-xs">olivia@untitledui.com</div>
+                <div className="text-sm">{user.name}</div>
+                <div className="text-xs">{user.email}</div>
               </div>
-              <div className=''>
+              <div className='cursor-pointer'
+              onClick={onLogout}
+              >
                 <MdOutlineLogout className="text-sm md:text-xl" />
               </div>
             </div>

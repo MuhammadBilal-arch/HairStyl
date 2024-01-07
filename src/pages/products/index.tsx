@@ -12,24 +12,17 @@ import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
 import DefaultLayout from '../../layout/DefaultLayout';
+import { fetchAllProducts } from '../../redux/slices/products';
 
 export const Products = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
-  const { users } = useSelector((state: any) => state.Users);
+  const { products } = useSelector((state: any) => state.Products);
 
-  const [status, setStatus] = useState(false);
 
   useEffect(() => {
-    const payload = {
-      accountType: 'CLIENT',
-    };
-    dispatch(fetchUsers(payload));
+    dispatch(fetchAllProducts({}));
   }, []);
-
-  const onChangeStatus = () => {
-    setStatus(!status);
-  };
 
   const columns = [
     {
@@ -38,15 +31,15 @@ export const Products = () => {
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
-          onClick={() =>
-            navigate('/product-detail', {
-              state: row,
-            })
-          }
+          // onClick={() =>
+          //   navigate('/product-detail', {
+          //     state: row,
+          //   })
+          // }
           className="flex w-full cursor-pointer items-center space-x-2 font-semibold"
         >
           <img
-            src={ASSETS.AUTH.SIGN_IN_COVER}
+            src={row?.image || ASSETS.PROFILE.PROFILE_COVER}
             alt=""
             className="h-7 w-7 rounded-full object-cover"
           />
@@ -67,7 +60,7 @@ export const Products = () => {
       name: 'Price',
       selector: (row: any) => (
         <div className="font-semibold text-black-primary">
-          {row.price || '€40'}
+          {`€${row.price}` || '€40'}
         </div>
       ),
     },
@@ -75,7 +68,7 @@ export const Products = () => {
       name: 'Sales',
       selector: (row: any) => (
         <div className="font-semibold text-black-primary">
-          {row.sales || '€1340'}
+          {row.sales || 'N/A'}
         </div>
       ),
     },
@@ -84,10 +77,12 @@ export const Products = () => {
   return (
     <DefaultLayout>
       <Table
+        goBack={false}
         heading="Products"
         columns={columns}
-        data={users}
+        data={products}
         filterByDays={false}
+        rateFilter={true}
       />
     </DefaultLayout>
   );

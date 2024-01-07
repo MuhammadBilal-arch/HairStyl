@@ -8,6 +8,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { ASSETS } from '../../images/path';
 import { BtnFilled } from '../../components/button';
+import { API_HANDLER, API_HANDLER_FORM_DATA_NORMAL, showToast } from '../../utils/functions';
+import { END_POINTS } from '../../utils/endpoints';
+import { TOAST_TYPE } from '../../utils/constants';
 
 export const ResetPasswordEmail = () => {
   const navigate = useNavigate();
@@ -43,8 +46,22 @@ export const ResetPasswordEmail = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-      navigate('/reset-password-otp');
+
+      const formData = new FormData();
+      formData.append('email', values.email);
+
+      const result = await API_HANDLER_FORM_DATA_NORMAL(
+        'POST',
+        END_POINTS.AUTH.FORGOT,
+        formData
+      );
+      console.log(result, 'result');
+      if (result?.data) {
+        showToast(result.data.msg, TOAST_TYPE.success);
+      }
     },
+      // navigate('/reset-password-otp');
+    // },
   });
 
   return (
@@ -90,7 +107,8 @@ export const ResetPasswordEmail = () => {
 
               <div className="space-y-5 pt-4">
                 <BtnFilled
-                  text="Send OTP"
+                  // text="Send OTP"
+                  text="Submit"
                   background="bg-yellow-primary"
                   color="text-black-primary"
                   width="w-full"

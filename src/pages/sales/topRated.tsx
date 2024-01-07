@@ -1,27 +1,25 @@
 import { useState, useEffect } from 'react';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { FaStar } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-
-import { fetchUsers } from '../../redux/slices/customers';
-import { calculateAge } from '../../utils/functions';
 import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
 import DefaultLayout from '../../layout/DefaultLayout';
-import { fetchTopSellingVendors, onUpdateTopSellingStatus, onUpdateVendorStatus } from '../../redux/slices/vendors';
+import { fetchTopRatedVendors, fetchTopSellingVendors, onUpdateTopSellingStatus, onUpdateVendorStatus } from '../../redux/slices/vendors';
 
-export const Sales = () => {
+export const TopRated = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
-  const { topSellings } = useSelector((state: any) => state.Vendors);
+  const { topRated } = useSelector((state: any) => state.Vendors);
 
   useEffect(() => {
-    dispatch(fetchTopSellingVendors({}));
+    dispatch(fetchTopRatedVendors({}));
   }, []);
+
+  console.log(topRated,"top")
 
   const onChangeStatus = (user: any) => {
     dispatch(
@@ -93,14 +91,13 @@ export const Sales = () => {
     <DefaultLayout>
       <Table
         goBack={false}
-        heading="Top Selling Shops"
+        heading="Top Rated Shops"
         columns={columns}
-        data={topSellings}
+        data={topRated}
         filterByDays={false}
         showPagination={true}
         showBottomTab={false}
         onViewAllContent={() => navigate('')}
-        statusFilter={true}
       />
     </DefaultLayout>
   );

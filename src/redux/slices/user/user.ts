@@ -31,12 +31,11 @@ export const userSlice = createSlice({
       state.error = null;
     });
     builder.addCase(onLoginUser.fulfilled, (state, action) => {
-     
-        state.isLoading = false;
-        state.user = action.payload?.data;
-        state.isLogged = true;
-        setLocalStorage('Token', action?.payload?.data?.token);
+        state.user = action.payload?.user;
+        setLocalStorage('Token', action?.payload?.token);
         showToast(action?.payload?.message, TOAST_TYPE.success);
+        state.isLoading = false;
+        state.isLogged = true; 
       
     });
     builder.addCase(onLoginUser.rejected, (state, action) => {
@@ -47,16 +46,16 @@ export const userSlice = createSlice({
     });
 
     //  ON UPDATE
-    builder.addCase(onUpdateUserDispensaryInfo.pending, (state) => {
+    builder.addCase(onUpdateUser.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
-    builder.addCase(onUpdateUserDispensaryInfo.fulfilled, (state, action) => {
+    builder.addCase(onUpdateUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.user.dispensary = action?.payload?.data;
+      state.user = action?.payload?.user;
       showToast(action.payload?.message, TOAST_TYPE.success);
     });
-    builder.addCase(onUpdateUserDispensaryInfo.rejected, (state, action) => {
+    builder.addCase(onUpdateUser.rejected, (state, action) => {
       state.isLoading = false;
       state.error = action?.payload?.message || 'Error Occurred.';;
       showToast(action?.payload?.message || 'Error Occurred.', TOAST_TYPE.error);
@@ -77,13 +76,13 @@ export const onLoginUser = createAsyncThunk(
   }
 );
 
-export const onUpdateUserDispensaryInfo = createAsyncThunk(
-  'user/onUpdateUserDispensaryInfo',
+export const onUpdateUser = createAsyncThunk(
+  'user/onUpdateUser',
   async (payload: any, { rejectWithValue }) => {
     try {
       const result = await API_HANDLER_FORM_DATA(
-        'PATCH',
-        END_POINTS.DISPENSARIES.UPDATE,
+        'POST',
+        END_POINTS.ADMINS.UPDATE,
         payload
       );
       const data = await result?.data;

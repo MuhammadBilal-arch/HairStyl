@@ -2,21 +2,6 @@ import React from 'react';
 import Select from 'react-select';
 import { FaCheck } from 'react-icons/fa';
 
-// const customStyles = {
-//   control: (provided) => ({
-//     ...provided,
-//     height: '8px', // Change the height to your desired value
-//   }),
-//   option: (provided, state) => ({
-//     ...provided,
-//     display: 'flex',
-//     alignItems: 'center',
-//     padding: '8px 16px',
-//     color: state.isSelected ? 'white' : 'black',
-//     backgroundColor: state.isSelected ? '#007bff' : 'white',
-//   }),
-// };
-
 const customStyles = {
   control: (provided, state) => ({
     ...provided,
@@ -46,6 +31,8 @@ const customStyles = {
   }),
 };
 
+
+
 const CustomOption = ({ innerProps, label, isSelected }) => (
   <div
     {...innerProps}
@@ -59,7 +46,7 @@ const CustomOption = ({ innerProps, label, isSelected }) => (
   </div>
 );
 
-export const CustomSelect = ({ options }) => {
+export const CustomSelect = ({ options , onSelectOption }) => {
   return (
     <Select
       className="z-1 text-sm w-full"
@@ -69,6 +56,7 @@ export const CustomSelect = ({ options }) => {
         Option: CustomOption,
         IndicatorSeparator: () => null,
       }}
+      onChange={onSelectOption}
     />
   );
 };

@@ -43,7 +43,7 @@ export const SwipperComponent = ({ list }) => {
       >
         {list?.map((item, index) => (
           <SwiperSlide key={index}>
-            <img src={item?.img} alt="" />
+            <img src={item?.image} alt="" />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -5,28 +5,45 @@ import { FaStar } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
+
+import { fetchUsers, onUpdateUserStatus } from '../../redux/slices/customers';
+import { API_HANDLER, calculateAge } from '../../utils/functions';
 import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
-import { Table } from '../../components/table'; 
+import { Table } from '../../components/table';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import DefaultLayout from '../../layout/DefaultLayout';
 import { BarChart } from '../../components/chart';
 import DropdownNotification from '../../components/DropdownNotification';
-import { ChartLine } from '../../components/ChartLine';
-import { PieChart } from '../../components/chart/pie';
-import { fetchTopSellingVendors, onUpdateTopSellingStatus } from '../../redux/slices/vendors';
+import { ExportToExcel } from '../../components/export';
+import { fetchVendors, onUpdateVendorStatus } from '../../redux/slices/vendors';
+import { END_POINTS } from '../../utils/endpoints';
 
-export const SalesDetail = () => {
+export const HomeDetail = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<any>();
-  const { topSellings } = useSelector((state: any) => state.Vendors);
-  console.log(topSellings,"TOP SELLINGS")
+  const [stats, setStats] = useState('');
+  const { vendors } = useSelector((state: any) => state.Vendors);
+
   useEffect(() => {
-    dispatch(fetchTopSellingVendors({}));
+    dispatch(fetchVendors({}));
+    onGetDashboardStats();
   }, []);
 
+  const onGetDashboardStats = async () => {
+    const result = await API_HANDLER('GET', END_POINTS.DASHBOARD.GET, {});
+    console.log(result);
+    if (result?.data?.status == 'success') {
+      setStats(result?.data?.data);
+    }
+  };
+
   const onChangeStatus = (user: any) => {
+    // setStatus(!status);
+
     dispatch(
-      onUpdateTopSellingStatus({
+      onUpdateVendorStatus({
         _id: user.id,
         status: user.status == 0 ? 1 : 0,
       })
@@ -35,31 +52,39 @@ export const SalesDetail = () => {
 
   const columns = [
     {
-      name: 'Sales',
-      selector: 'Sales',
+      name: 'Clients',
       width: '250px', // Specify the width here
       cell: (row: any) => (
         <div
-          className="flex w-full font-semibold cursor-pointer items-center space-x-2 text-purple-primary"
+          className="flex w-full cursor-pointer items-center space-x-2 text-purple-primary"
           onClick={() =>
-            navigate('/sales-details', {
+            navigate('/client-detail', {
               state: row,
             })
           }
         >
           <img
-            src={row?.image || ASSETS.DUMMY_IMAGE}
+            src={ASSETS.AUTH.SIGN_IN_COVER}
             alt=""
-            className="h-7 w-7 rounded-full object-contain"
+            className="h-7 w-7 rounded-full object-cover"
           />
-          <div className=""> {row?.name}</div>
+          <div className=""> {row.name}</div>
         </div>
       ),
       sortable: true,
     },
     {
-      name: 'Shop',
-      selector: (row: any) => row.shopName,
+      name: 'City',
+      selector: (row: any) => <div>{row.city || 'N/A'}</div>,
+    },
+    {
+      name: 'Ratings',
+      selector: (row: any) => (
+        <span className="flex items-center space-x-2">
+          <FaStar className="text-yellow-primary" />{' '}
+          <span>{row?.ratings || '5.0'}</span>
+        </span>
+      ),
     },
     {
       name: 'Contact',
@@ -82,10 +107,10 @@ export const SalesDetail = () => {
       name: 'Hide / Unhide',
       selector: (row: any) => (
         <ToggleButton
-        onChangeStatus={() => onChangeStatus(row)}
-        status={row.status == 0 ? false : true}
-        text=""
-        id={row._id}
+          onChangeStatus={() => onChangeStatus(row)}
+          status={row.status == 0 ? false : true}
+          text=""
+          id={row.id}
         />
       ),
     },
@@ -93,40 +118,17 @@ export const SalesDetail = () => {
 
   return (
     <DefaultLayout>
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-normal font-semibold text-black-primary md:text-lg">
-            Sales
-          </h1>
-
-          <div className="flex items-center gap-3 2xsm:gap-7">
-            <ul className="flex items-center gap-2 2xsm:gap-4">
-              {/* <!-- Notification Menu Area --> */}
-              <DropdownNotification />
-            </ul>
-          </div>
-        </div>
-        <div>
-          <BarChart />
-        </div>
-        <div className="grid lg:grid-cols-5 gap-2">
-          <div className="lg:col-span-3">
-            <ChartLine />
-          </div>
-          {/* <div className="lg:col-span-2 overflow-hidden object-contain rounded-sm border border-stroke bg-white py-7.5 px-5 shadow-default">
-              <PieChart/>
-          </div> */}
-        </div>
-
+      <div className="space-y-6 pb-10">
         <Table
           goBack={false}
-          heading="Top Selling Shop"
+          heading="Registered clients"
           columns={columns}
-          data={topSellings}
+          data={vendors}
           filterByDays={false}
-          showPagination={false}
-          showBottomTab={true}
-          onViewAllContent={() => navigate('/sales-details')}
+          showPagination={true}
+          showBottomTab={false}
+          onViewAllContent={()=>{}}
+          rateFilter={true}
           statusFilter={true}
         />
       </div>
