@@ -48,9 +48,9 @@ export const Clients = () => {
           }
         >
           <img
-            src={row?.image || ASSETS.DUMMY_IMAGE}
+            src={row?.image.length > 0 ? row?.image[0] : ASSETS.DUMMY_IMAGE}
             alt=""
-            className="h-7 w-7 rounded-full object-contain"
+            className="h-7 w-7 rounded-full object-cover"
           />
           <div className=""> {row.name}</div>
         </div>

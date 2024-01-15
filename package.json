@@ -19,6 +19,7 @@
     "axios": "^1.5.0",
     "chart.js": "^4.4.0",
     "date-fns": "^2.30.0",
+    "firebase": "^10.7.1",
     "formik": "^2.4.4",
     "jsvectormap": "^1.5.1",
     "localforage": "^1.10.0",

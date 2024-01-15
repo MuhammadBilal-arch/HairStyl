@@ -37,7 +37,7 @@ export const Staff = () => {
       cell: (row: any) => (
         <div className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary">
           <img
-            src={row?.profilePicture || ASSETS.AUTH.SIGN_IN_COVER}
+            src={row?.profilePicture != null ? JSON.parse(row?.profilePicture) : ASSETS.AUTH.SIGN_IN_COVER}
             alt=""
             className="h-7 w-7 rounded-full object-cover"
           />

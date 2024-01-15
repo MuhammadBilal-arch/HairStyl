@@ -39,7 +39,7 @@ export const Customer = () => {
       cell: (row: any) => (
         <div className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary">
           <img
-            src={row?.image || ASSETS.DUMMY_IMAGE}
+            src={row?.image?.length > 0 ? row?.image[0] : ASSETS.DUMMY_IMAGE}
             alt=""
             className="h-7 w-7 rounded-full object-contain"
           />

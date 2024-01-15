@@ -5,18 +5,12 @@ import { FaStar } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-
-import { fetchUsers, onUpdateUserStatus } from '../../redux/slices/customers';
-import { API_HANDLER, calculateAge } from '../../utils/functions';
+import { API_HANDLER } from '../../utils/functions';
 import { ASSETS } from '../../images/path';
 import { ToggleButton } from '../../components/toggle';
 import { Table } from '../../components/table';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
+
 import DefaultLayout from '../../layout/DefaultLayout';
-import { BarChart } from '../../components/chart';
-import DropdownNotification from '../../components/DropdownNotification';
-import { ExportToExcel } from '../../components/export';
 import { fetchVendors, onUpdateVendorStatus } from '../../redux/slices/vendors';
 import { END_POINTS } from '../../utils/endpoints';
 

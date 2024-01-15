@@ -63,7 +63,7 @@ export const Home = () => {
           }
         >
           <img
-            src={ASSETS.AUTH.SIGN_IN_COVER}
+            src={row?.image?.length > 0 ? row?.image[0] : ASSETS.DUMMY_IMAGE}
             alt=""
             className="h-7 w-7 rounded-full object-cover"
           />
@@ -170,10 +170,6 @@ export const Home = () => {
                   { value: 'All', label: 'All' },
                   { value: 'All products', label: 'All products' },
                   { value: 'All services', label: 'All services' },
-                  // {
-                  //   value: 'Products & services',
-                  //   label: 'Products & services',
-                  // },
                 ]}
                 background="black"
                 onSelectOption={handleSelectOption}

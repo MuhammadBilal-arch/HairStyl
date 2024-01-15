@@ -35,7 +35,10 @@ import { Categories } from './pages/categories';
 import { TermsConditions } from './pages/termsConditions';
 import { ServiceCategories } from './pages/services/categories';
 import { HomeDetail } from './pages/home/detail';
-import { TopRated } from './pages/sales/topRated';
+import { TopRated } from './pages/sales/topRated'; 
+import { requestForToken , onMessageListener } from './firebase';
+import { showToast } from './utils/functions/index.js';
+import { TOAST_TYPE } from './utils/constants';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -53,6 +56,16 @@ function App() {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
+  requestForToken();
+
+  onMessageListener()
+    .then((payload) => {
+
+      // showToast({title: payload?.notification?.title, body: payload?.notification?.body}, TOAST_TYPE.success);     
+      showToast(payload?.notification?.body, TOAST_TYPE.success);     
+    })
+    .catch((err) => console.log('failed: ', err));
+
   return (
     <>
       <Provider store={store}>
@@ -63,8 +76,14 @@ function App() {
                 {/* <Route path="/calendar" element={<Calendar />} /> */}
                 <Route path="/" element={<SignIn />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/reset-password-email" element={<ResetPasswordEmail />} />
-                <Route path="/reset-password-otp" element={<ResetPasswordOtp />} />
+                <Route
+                  path="/reset-password-email"
+                  element={<ResetPasswordEmail />}
+                />
+                <Route
+                  path="/reset-password-otp"
+                  element={<ResetPasswordOtp />}
+                />
 
                 <Route path="/home-detail" element={<HomeDetail />} />
                 <Route path="/home" element={<Home />} />
@@ -72,19 +91,17 @@ function App() {
                 <Route path="/customers" element={<Customer />} />
                 <Route path="/staff" element={<Staff />} />
                 <Route path="/products" element={<Products />} />
-                <Route path="/chart" element={<Chart />} /> 
-                <Route path="/services-list" element={<ServiceCategories />} /> 
-                <Route path="/services/:id" element={<Services />} /> 
-                <Route path="/sales-details" element={<Sales />} /> 
-                <Route path="/sales" element={<SalesDetail />} /> 
-                <Route path="/sales-top-rated" element={<TopRated />} /> 
-                <Route path="/ecommerce" element={<ECommerce />} /> 
-                <Route path="/account" element={<Profile />} /> 
-                <Route path="/manage-accounts" element={<ManageAccounts />} /> 
-                <Route path="/categories" element={<Categories />} /> 
-                <Route path="/terms-conditions" element={<TermsConditions />} /> 
-                
-
+                <Route path="/chart" element={<Chart />} />
+                <Route path="/services-list" element={<ServiceCategories />} />
+                <Route path="/services/:id" element={<Services />} />
+                <Route path="/sales-details" element={<Sales />} />
+                <Route path="/sales" element={<SalesDetail />} />
+                <Route path="/sales-top-rated" element={<TopRated />} />
+                <Route path="/ecommerce" element={<ECommerce />} />
+                <Route path="/account" element={<Profile />} />
+                <Route path="/manage-accounts" element={<ManageAccounts />} />
+                <Route path="/categories" element={<Categories />} />
+                <Route path="/terms-conditions" element={<TermsConditions />} />
 
                 <Route path="/client-detail" element={<CustomerDetail />} />
                 <Route path="/product-detail" element={<ProductDetail />} />
