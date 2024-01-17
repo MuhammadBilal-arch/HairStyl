@@ -1,15 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import notifications, {
-  fetchNotifications,
-} from '../redux/slices/notifications';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  getFirestore,
+  doc,
+  getDocs,
+  collection,
+  updateDoc,
+} from 'firebase/firestore';
 import moment from 'moment';
+import { ASSETS } from '../images/path';
 
 const DropdownNotification = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const { notifications } = useSelector((state) => state.Notifications);
+  const [notifications, setNotifications] = useState([]);
+  const [notificationStatus, setNotificationStatus] = useState(0);
+  const navigate = useNavigate();
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
 
@@ -37,7 +42,64 @@ const DropdownNotification = () => {
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
   });
-  console.log(notifications);
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        // Get a Firestore instance
+        const firestore = getFirestore();
+
+        // Reference the "notifications" collection
+        const collectionRef = collection(firestore, 'notifications');
+
+        // Fetch all documents in the collection
+        const querySnapshot = await getDocs(collectionRef);
+
+        // Initialize an array to store the notifications
+        const notifications = [];
+
+        // Loop through each document in the collection
+        querySnapshot.forEach((documentSnapshot) => {
+          // Access the document data
+          const documentData = documentSnapshot.data();
+          notifications.push(documentData);
+        });
+
+        console.log(notifications);
+        setNotifications(notifications);
+
+        const hasStatusOne = notifications.some(
+          (notification) => notification.status === 1
+        );
+
+        // Set the notification status based on the condition
+        setNotificationStatus(hasStatusOne ? 1 : 0);
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      }
+    };
+
+    fetchNotifications();
+  }, []);
+
+  const onOpenNotification = async (item) => {
+    try {
+      // Get a Firestore instance
+      const firestore = getFirestore();
+
+      // Reference the document you want to update
+      const documentRef = doc(firestore, 'notifications', item?.id);
+
+      // Update the document
+      await updateDoc(documentRef, { status: 1 });
+      item.user_type === 'vendor'
+        ? navigate(`/vendor/${item.user_id}`)
+        : navigate(`/user/${item.user_id}`);
+      console.log('Document updated successfully');
+    } catch (error) {
+      console.error('Error updating document:', error);
+    }
+  };
   return (
     <li className="relative">
       <Link
@@ -46,9 +108,11 @@ const DropdownNotification = () => {
         to="#"
         className="relative flex h-8.5 w-8.5 items-center justify-center  hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
       >
-        <span className="absolute top-0.5 right-1 z-1 h-2 w-2 rounded-full bg-meta-1">
-          <span className="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-meta-1 opacity-75"></span>
-        </span>
+        {notificationStatus == 0 && (
+          <span className="absolute top-0.5 right-1 z-1 h-2 w-2 rounded-full bg-meta-1">
+            <span className="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-meta-1 opacity-75"></span>
+          </span>
+        )}
 
         <svg
           className="fill-current duration-300 ease-in-out"
@@ -82,25 +146,34 @@ const DropdownNotification = () => {
         <ul className="flex h-auto flex-col overflow-y-auto">
           {notifications?.map((item: any, index: number) => (
             <li key={index}>
-              <Link
-                className="flex flex-col gap-2.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
-                to="#"
-              >
-                <div className="flex items-center justify-between space-y-1 text-sm">
-                  <span className="font-semibold text-black-primary dark:text-white">
-                    {item?.status}
-                  </span>
-                  <span className="text-xs">
-                    {moment(item?.createdAt).format('MMM D, YYYY @ h:mm A')}
-                  </span>
-                  {/* <span>5Items</span> */}
+              <div className="flex flex-col gap-2.5 border-t border-stroke py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4">
+                <div className="flex justify-between border-b border-grey-primary border-opacity-20 px-4 pb-2 text-xs">
+                  <div className=" flex w-[70%] flex-col space-y-3">
+                    <div className="flex space-x-2">
+                      <img
+                        src={item?.image ? item?.image : ASSETS.DUMMY_IMAGE}
+                        alt=""
+                        className="h-7 w-7 rounded-full object-contain"
+                      />
+                      <div className="font-regular text-black-primary dark:text-white ">
+                        A new{' '}
+                        {item.user_type === 'vendor' ? 'shop' : 'customer'} is
+                        registered with name{' '}
+                        <div className="font-semibold">"{item.name}"</div>
+                      </div>
+                    </div>
+                    <div className="text-xs text-grey-primary">
+                      {moment(item?.createdAt).fromNow()}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => onOpenNotification(item)}
+                    className="h-7 bg-yellow-primary px-2 py-1 text-xs text-black-primary"
+                  >
+                    View Detail
+                  </button>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="font-semibold text-black-primary dark:text-white ">
-                    {item.message}{' '}
-                  </span>
-                </div>
-              </Link>
+              </div>
             </li>
           ))}
         </ul>

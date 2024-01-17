@@ -31,8 +31,6 @@ export const Clients = () => {
     }));
   };
 
-
-
   const columns = [
     {
       name: 'Clients',
@@ -42,9 +40,7 @@ export const Clients = () => {
         <div
           className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary"
           onClick={() =>
-            navigate('/client-detail', {
-              state: row,
-            })
+            navigate(`/vendor/${row.id}`)
           }
         >
           <img

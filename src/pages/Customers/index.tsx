@@ -18,7 +18,6 @@ export const Customer = () => {
   const { users } = useSelector((state: any) => state.Users);
 
   useEffect(() => {
-    
     dispatch(fetchUsers({}));
   }, []);
 
@@ -37,7 +36,9 @@ export const Customer = () => {
       selector: 'Customers',
       width: '250px', // Specify the width here
       cell: (row: any) => (
-        <div className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary">
+        <div 
+        onClick={()=> navigate(`/user/${row.id}`)}
+        className="flex w-full cursor-pointer items-center space-x-2 font-semibold text-black-primary">
           <img
             src={row?.image?.length > 0 ? row?.image[0] : ASSETS.DUMMY_IMAGE}
             alt=""

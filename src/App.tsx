@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import { SignIn } from './pages/Authentication';
 import { SocketProvider } from './context/socketContext';
 import { Customer } from './pages/Customers';
-import { CustomerDetail } from './pages/clients/detail';
+import {VendorDetail } from './pages/clients/detail';
 // import { AddDispensary } from './pages/Dispensaries/add';
 // import { Dispensaries } from './pages/Dispensaries';
 // import { DispensaryDetail } from './pages/Dispensaries/detail';
@@ -39,6 +39,7 @@ import { TopRated } from './pages/sales/topRated';
 import { requestForToken , onMessageListener } from './firebase';
 import { showToast } from './utils/functions/index.js';
 import { TOAST_TYPE } from './utils/constants';
+import { UserDetail } from './pages/Customers/detail.js';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -103,7 +104,8 @@ function App() {
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/terms-conditions" element={<TermsConditions />} />
 
-                <Route path="/client-detail" element={<CustomerDetail />} />
+                <Route path="/vendor/:id" element={<VendorDetail />} />
+                <Route path="/user/:id" element={<UserDetail />} />
                 <Route path="/product-detail" element={<ProductDetail />} />
 
                 {/* <Route path="/dispensaries" element={<Dispensaries />} />

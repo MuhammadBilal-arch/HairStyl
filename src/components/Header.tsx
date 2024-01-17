@@ -15,7 +15,6 @@ import { onResetUserState } from '../redux/slices/user/user';
 import { showToast } from '../utils/functions';
 import { onResetDispensaryList } from '../redux/slices/dispensaries';
 import { onResetDriverList } from '../redux/slices/drivers';
-import { fetchNotifications } from '../redux/slices/notifications';
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
