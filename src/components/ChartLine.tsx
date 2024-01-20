@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 import { ApexOptions } from 'apexcharts';
 import { BiCloudLightning } from 'react-icons/bi';
+import { API_HANDLER, calculateMonthlyData } from '../utils/functions';
+import { END_POINTS } from '../utils/endpoints';
 
 export const ChartLine: React.FC = () => {
+  const [chartDataObject, setChartDataObject] = useState([]);
+  useEffect(() => {
+    onGetData();
+  }, []);
+
+  const onGetData = async () => {
+    const result = await API_HANDLER('GET', END_POINTS.DASHBOARD.CHARTS, {});
+    if (result?.data?.status == 'success') {
+      setChartDataObject(result?.data?.data || []);
+    }
+  };
   const [state, setState] = useState({
     series: [
       {
         name: 'Services',
-        data: [0, 5000, 10000, 12000, 13000, 12800, 9000, 10000, 13700,  13750, 13800, 13800],
+        data: calculateMonthlyData(chartDataObject).tokenAmounts,
+        // data: [0, 5000, 10000, 12000, 13000, 12800, 9000, 10000, 13700,  13750, 13800, 13800],
       },
       {
         name: 'Products',
-        data: [3000, 5000, 8000, 9000, 10000, 10800, 8000, 9000, 10700,  11750, 13800, 13800],
+        data: [
+          3000, 5000, 8000, 9000, 10000, 10800, 8000, 9000, 10700, 11750, 13800,
+          13800,
+        ],
       },
     ],
   });
