@@ -3,12 +3,13 @@ import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB2RV64JSaTN_aZLzhZ7hEYIummno7X_N0',
-  authDomain: 'acquired-racer-394518.firebaseapp.com',
-  projectId: 'acquired-racer-394518',
-  storageBucket: 'acquired-racer-394518.appspot.com',
-  messagingSenderId: '898098190059',
-  appId: '1:898098190059:web:dc165363e4ffecc00750ae',
+  apiKey: "AIzaSyB6cuqboAH44Xf8cOV7Kt536fd8tbPgdTs",
+  authDomain: "hair-style-69f4c.firebaseapp.com",
+  projectId: "hair-style-69f4c",
+  storageBucket: "hair-style-69f4c.appspot.com",
+  messagingSenderId: "645636374980",
+  appId: "1:645636374980:web:afadf6e5f0e42388802491",
+  measurementId: "G-YJCY03RQV1"
 };
 
 // Initialize Firebase
